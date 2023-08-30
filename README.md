@@ -1,2 +1,42 @@
-# Gen_room.py
- 
+# Genroom - Sistema de Gerenciamento de Salas para Faculdades
+O Genroom é um sistema de gerenciamento de salas desenvolvido para uso em instituições de ensino superior, como faculdades e universidades. Ele foi projetado para facilitar o processo de administração e reserva de salas de aula, contribuindo para uma experiência mais eficiente e organizada no ambiente acadêmico.
+
+## Arquitetura de Camadas: Interface do Usuário, Lógica de Negócios e Armazenamento de Dados
+O Genroom foi projetado com base em uma arquitetura de camadas que separa distintamente as responsabilidades do sistema. Cada camada possui um papel específico:
+### Interface do Usuário (Presentation)
+É a camada responsável por interagir diretamente com o usuário. Ela fornece as rotas da API e a interface gráfica (caso haja) para que os usuários possam acessar e utilizar as funcionalidades do sistema.
+### Lógica de Negócios (Application)
+Essa camada contém a lógica central do sistema. Aqui, estão as regras de negócios, serviços de aplicação e transformações de dados. Ela faz a ponte entre a interface do usuário e o armazenamento de dados, garantindo que as operações sejam executadas de acordo com as regras estabelecidas.
+### Armazenamento de Dados (Domain/Infrastructure)
+A camada de armazenamento de dados abriga os repositórios, que são responsáveis por acessar e persistir os dados do sistema. No caso do Genroom, utilizamos um repositório em memória para simplificar o exemplo, mas isso poderia ser substituído por um banco de dados real.
+
+## Princípios de Projetos Aplicados
+O desenvolvimento do Genroom foi guiado por importantes princípios de projeto para garantir um código organizado, modular e de fácil manutenção:
+### Modularidade
+O sistema foi dividido em módulos bem definidos, como os controladores, serviços e repositórios. Isso facilita a manutenção e o desenvolvimento de novas funcionalidades.
+### Ocultação da Informação
+As camadas são projetadas para minimizar o acoplamento e proteger a informação sensível. Cada camada conhece apenas a camada imediatamente inferior, reduzindo dependências desnecessárias.
+### Independência Funcional
+As camadas têm responsabilidades bem definidas, permitindo que as alterações em uma camada não afetem outras partes do sistema.
+### Design Orientado a Domínio
+O Genroom é modelado em torno do domínio de gerenciamento de salas, garantindo que o código reflita a realidade do problema a ser resolvido.
+### Coerência e Coesão
+Cada componente do sistema tem uma única responsabilidade, garantindo que o código seja coeso e que as partes relacionadas estejam próximas.
+
+## Funcionalidades Implementadas
+O Genroom implementa várias funcionalidades essenciais para o gerenciamento de salas:
+
+Listagem de todas as salas disponíveis.
+Detalhes de uma sala específica.
+Criação de novas salas.
+Reserva e liberação de salas.
+Listagem de salas ocupadas.
+
+### Como Executar a Aplicação
+Para executar a aplicação, siga as seguintes etapas:
+
+Certifique-se de ter o Python instalado em seu sistema.
+Navegue até o diretório raiz do projeto no terminal.
+Execute o comando pip install Flask para instalar a biblioteca Flask (se ainda não estiver instalada).
+Execute o comando python src/main.py para iniciar o servidor Flask.
+Acesse a API através do endereço http://127.0.0.1:5000/api/.
