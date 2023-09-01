@@ -8,7 +8,8 @@ room_service = RoomService()
 @room_app.route('/rooms', methods=['GET'])
 def get_rooms():
     rooms = room_service.get_all_rooms()
-    return jsonify(rooms)
+    rooms_json = [room.to_json() for room in rooms]
+    return jsonify(rooms_json)
 
 @room_app.route('/rooms/<string:room_id>/reserve', methods=['POST'])
 def reserve_room(room_id):
