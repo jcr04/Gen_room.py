@@ -39,9 +39,26 @@ class RoomService:
     
     def reserve_room(self, room_id):
         room = self.room_repository.find_by_id(room_id)
-        if room and not room.is_occupied:
+        if room:
+            if room.is_occupied:
+                return None  # A sala já está ocupada
             room.is_occupied = True
-            return Room(room.id, room.name)
+            return self.get_room_details(room_id)  # Retorna detalhes da sala após a reserva
         return None
     
+    def get_room_details(self, room_id):
+        room = self.room_repository.find_by_id(room_id)
+        if room:
+            return {
+                'id': room.id,
+                'name': room.name,
+                'is_occupied': room.is_occupied
+            }
+        return None
     
+    def delete_room(self, room_id):
+        room = self.room_repository.find_by_id(room_id)
+        if room:
+            self.room_repository.delete_room(room)
+            return True  # Sala excluída com sucesso
+        return False
