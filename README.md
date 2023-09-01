@@ -1,14 +1,14 @@
 # Genroom - Sistema de Gerenciamento de Salas para Faculdades
-O Genroom é um sistema de gerenciamento de salas desenvolvido para uso em instituições de ensino superior, como faculdades e universidades. Ele foi projetado para facilitar o processo de administração e reserva de salas de aula, contribuindo para uma experiência mais eficiente e organizada no ambiente acadêmico.
+O Genroom é um sistema de gerenciamento de salas desenvolvido para instituições de ensino superior, como faculdades e universidades. Ele foi projetado para simplificar a administração e a reserva de salas de aula, tornando a experiência acadêmica mais eficiente e organizada.
 
 ## Arquitetura de Camadas: Interface do Usuário, Lógica de Negócios e Armazenamento de Dados
-O Genroom foi projetado com base em uma arquitetura de camadas que separa distintamente as responsabilidades do sistema. Cada camada possui um papel específico:
+O Genroom adota uma arquitetura de camadas que separa claramente as responsabilidades do sistema, garantindo uma organização eficaz. Cada camada possui um propósito específico:
 ### Interface do Usuário (Presentation)
-É a camada responsável por interagir diretamente com o usuário. Ela fornece as rotas da API e a interface gráfica (caso haja) para que os usuários possam acessar e utilizar as funcionalidades do sistema.
+Esta camada é responsável pela interação direta com os usuários. Ela fornece as rotas da API e, quando aplicável, a interface gráfica para que os usuários acessem e utilizem as funcionalidades do sistema.
 ### Lógica de Negócios (Application)
-Essa camada contém a lógica central do sistema. Aqui, estão as regras de negócios, serviços de aplicação e transformações de dados. Ela faz a ponte entre a interface do usuário e o armazenamento de dados, garantindo que as operações sejam executadas de acordo com as regras estabelecidas.
+A camada de lógica de negócios contém a essência do sistema. Aqui, encontramos as regras de negócios, serviços de aplicação e transformações de dados. Ela atua como a ponte entre a interface do usuário e o armazenamento de dados, garantindo que as operações sejam executadas de acordo com as regras estabelecidas.
 ### Armazenamento de Dados (Domain/Infrastructure)
-A camada de armazenamento de dados abriga os repositórios, que são responsáveis por acessar e persistir os dados do sistema. No caso do Genroom, utilizamos um repositório em memória para simplificar o exemplo, mas isso poderia ser substituído por um banco de dados real.
+Nesta camada, residem os repositórios responsáveis por acessar e persistir os dados do sistema. No caso do Genroom, utilizamos um repositório em memória para simplificar o exemplo, mas, em um cenário real, isso poderia ser substituído por um banco de dados.
 
 ## Princípios de Projetos Aplicados
 O desenvolvimento do Genroom foi guiado por importantes princípios de projeto para garantir um código organizado, modular e de fácil manutenção:
@@ -26,17 +26,19 @@ Cada componente do sistema tem uma única responsabilidade, garantindo que o có
 ## Funcionalidades Implementadas
 O Genroom implementa várias funcionalidades essenciais para o gerenciamento de salas:
 
-Listagem de todas as salas disponíveis.
-Detalhes de uma sala específica.
-Criação de novas salas.
-Reserva e liberação de salas.
-Listagem de salas ocupadas.
+* Listagem de todas as salas disponíveis.
+* Detalhes de uma sala específica.
+* Criação de novas salas.
+* Reserva e liberação de salas.
+* Listagem de salas ocupadas.
+
 
 ### Como Executar a Aplicação
 Para executar a aplicação, siga as seguintes etapas:
 
-Certifique-se de ter o Python instalado em seu sistema.
-Navegue até o diretório raiz do projeto no terminal.
-Execute o comando pip install Flask para instalar a biblioteca Flask (se ainda não estiver instalada).
-Execute o comando python src/main.py para iniciar o servidor Flask.
-Acesse a API através do endereço http://127.0.0.1:5000/api/.
+* Certifique-se de ter o Python instalado em seu sistema.
+* Navegue até o diretório raiz do projeto no terminal.
+* Execute o comando pip install Flask para instalar a biblioteca Flask (se ainda não estiver instalada).
+* Execute o comando python src/main.py para iniciar o servidor Flask.
+* Acesse a API através do endereço http://127.0.0.1:5000/api/.
+![Alt text](<Captura de tela 2023-09-01 115324.png>)
