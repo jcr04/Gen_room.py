@@ -25,13 +25,6 @@ class RoomService:
             room.name = new_name
             return Room(room.id, room.name)
         return None
-    
-    def delete_room(self, room_id):
-        room = self.room_repository.find_by_id(room_id)
-        if room:
-            self.room_repository.delete_room(room)
-            return Room(room.id, room.name)
-        return None
 
     def get_occupied_rooms(self):
         occupied_rooms = [room for room in self.room_repository.find_all() if room.is_occupied]
