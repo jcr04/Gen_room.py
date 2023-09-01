@@ -1,6 +1,9 @@
 from Domain.Entities.room import Room
 
 class RoomRepository:
+    def __init__(self):
+        self.rooms = []
+        
     def find_all(self):
        return self.rooms
 
