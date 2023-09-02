@@ -4,7 +4,6 @@ from Presentation.Controllers.room_controller import room_app
 
 app = Flask(__name__)
 
-
 app.register_blueprint(room_app, url_prefix='/api')
 
 if __name__ == '__main__':

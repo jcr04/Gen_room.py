@@ -1,5 +1,6 @@
 from Domain.Repositories.room_repository import RoomRepository
 from Domain.Entities.room import Room
+
 class InMemoryRoomRepository(RoomRepository):
     def __init__(self):
         self.rooms = []

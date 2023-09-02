@@ -55,3 +55,18 @@ class RoomService:
             self.room_repository.delete_room(room)
             return True  # Sala excluída com sucesso
         return False
+    
+    def get_available_rooms(self):
+        available_rooms = [room for room in self.room_repository.find_all() if not room.is_occupied]
+        return [Room(room.id, room.name) for room in available_rooms]
+    
+    def update_room_name(self, room_id, new_name):
+        room = self.room_repository.find_by_id(room_id)
+        if room:
+            room.name = new_name
+            return Room(room.id, room.name)
+        return None
+    
+    def get_rooms_by_type(self, room_type):
+        rooms = self.room_repository.find_by_type(room_type)
+        return [Room(room.id, room.name, room.room_type) for room in rooms]
