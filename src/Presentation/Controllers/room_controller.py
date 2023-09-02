@@ -11,6 +11,16 @@ def get_rooms():
     rooms_json = [room.to_json() for room in rooms]
     return jsonify(rooms_json)
 
+@room_app.route('/rooms', methods=['POST'])
+def create_new_room():
+    data = request.get_json()
+    name = data.get('name')
+    room_type = data.get('room_type')  # Adicione esta linha para obter o tipo de sala
+
+    new_room = room_service.create_room(name, room_type)  # Passe o room_type
+
+    return jsonify(new_room.to_json()), 201
+
 @room_app.route('/rooms/<string:room_id>/reserve', methods=['POST'])
 def reserve_room(room_id):
     result = room_service.reserve_room(room_id)

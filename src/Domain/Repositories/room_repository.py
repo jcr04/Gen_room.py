@@ -17,8 +17,8 @@ class RoomRepository:
     def find_by_id(self, id):
         return next((room for room in self.rooms if room.id == id), None)
 
-    def create_room(self, name):
-        new_room = Room(id=str(len(self.rooms) + 1), name=name)
+    def create_room(self, name, room_type):
+        new_room = Room(id=str(len(self.rooms) + 1), name=name, room_type=room_type)
         self.rooms.append(new_room)
         return new_room
     

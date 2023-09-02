@@ -9,9 +9,9 @@ class RoomService:
         rooms = self.room_repository.find_all()
         return [Room(room.id, room.name) for room in rooms]
     
-    def create_room(self, name):
-        new_room = self.room_repository.create_room(name)
-        return Room(new_room.id, new_room.name)
+    def create_room(self, name, room_type):
+        new_room = self.room_repository.create_room(name, room_type)
+        return Room(new_room.id, new_room.name, new_room.room_type)
     
     def get_room_by_id(self, room_id):
         room = self.room_repository.find_by_id(room_id)
