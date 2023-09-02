@@ -41,4 +41,4 @@ Para executar a aplicação, siga as seguintes etapas:
 * Execute o comando pip install Flask para instalar a biblioteca Flask (se ainda não estiver instalada).
 * Execute o comando python src/main.py para iniciar o servidor Flask.
 * Acesse a API através do endereço http://127.0.0.1:5000/api/.
-![Alt text](<Captura de tela 2023-09-01 115324.png>)
+![Alt text](<Captura de tela 2023-09-02 140634.png>)
