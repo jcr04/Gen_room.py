@@ -89,7 +89,7 @@ Método find_by_id(id)
 Este método encontra uma sala com base em seu ID.
 
 * Parâmetros:
-* -id (str): O ID da sala a ser encontrada.
+* id (str): O ID da sala a ser encontrada.
 * Retorno: Um objeto Room representando a sala encontrada ou None se não for encontrada.
 
 Método create_room(name, room_type)
