@@ -7,7 +7,7 @@ class RoomService:
 
     def get_all_rooms(self):
         rooms = self.room_repository.find_all()
-        return [Room(room.id, room.name) for room in rooms]
+        return [Room(room.id, room.name, room.room_type) for room in rooms if hasattr(room, 'room_type')]
     
     def create_room(self, name, room_type):
         new_room = self.room_repository.create_room(name, room_type)

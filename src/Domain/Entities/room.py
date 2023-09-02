@@ -1,16 +1,16 @@
 class Room:
-    def __init__(self, id, name, room_type):
+    def __init__(self, id, name, room_type, is_occupied=False):
         self.id = id
         self.name = name
-        self.is_occupied = False
         self.room_type = room_type
+        self.is_occupied = is_occupied
         self.reservations = []
 
     def to_json(self):
         return {
             'id': self.id,
             'name': self.name,
-            'is_occupied': self.is_occupied,
             'room_type': self.room_type,
+            'is_occupied': self.is_occupied,
             'reservations': self.reservations
         }
