@@ -7,9 +7,9 @@ class RoomRepository:
         self.rooms = []
 
         # Adicione algumas salas diretamente no construtor
-        self.create_room("Sala 101")
-        self.create_room("Sala 102")
-        self.create_room("Sala 103")
+        self.create_room("Sala 101", "Tipo da Sala 1")
+        self.create_room("Sala 102", "Tipo da Sala 2")
+        self.create_room("Sala 103", "Tipo da Sala 1")  # Adicione o tipo de sala aqui
         
     def find_all(self):
        return self.rooms
