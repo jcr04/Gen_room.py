@@ -5,6 +5,7 @@ from Domain.Repositories.room_repository import RoomRepository
 
 class RoomService:
     def __init__(self):
+        self.rooms = []
         self.room_repository = RoomRepository()
 
     def get_all_rooms(self):
@@ -72,3 +73,36 @@ class RoomService:
     def get_rooms_by_type(self, room_type):
         rooms = self.room_repository.find_by_type(room_type)
         return [Room(room.id, room.name, room.room_type) for room in rooms]
+    
+    def reserve_room_by_period(self, room_id, start_time, end_time):
+        room = self.find_by_id(room_id)
+
+        if room is None:
+            return {'error': 'Room not found'}
+
+        try:
+            start_datetime = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+            end_datetime = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            return {'error': 'Invalid date format'}
+
+        if start_datetime >= end_datetime:
+            return {'error': 'Invalid time period'}
+
+        for reservation in room.reservations:
+            if start_datetime < reservation['end_time'] and end_datetime > reservation['start_time']:
+                return {'error': 'Room already occupied during this period'}
+
+        room.reservations.append({
+            'start_time': start_datetime,
+            'end_time': end_datetime
+        })
+
+        return {'message': 'Room reserved successfully'}
+    
+    def find_by_id(self, room_id):
+        for room in self.rooms:
+            print(f"Room ID: {room.id}")
+            if room.id == room_id:
+                return room
+        return None
