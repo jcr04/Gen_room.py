@@ -129,7 +129,7 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 * Modo de Depuração: True (para depuração, você pode definir como False em produção)
 
 ## Endpoint da API
-
+### Requisições pelo Postman
 A API oferece os seguintes endpoints:
 
 * /api/rooms (GET): Retorna todas as salas disponíveis.
@@ -158,5 +158,70 @@ Para executar o projeto, siga estas etapas:
 * Certifique-se de ter o Python instalado em seu sistema.
 * Instale as dependências do projeto executando pip install Flask.
 * Execute o arquivo main.py com o comando python main.py.
-* A API estará disponível em http://localhost:5000/api.
+* A API estará disponível em http://localhost:5001/api.
 
+### Executaando o Postman:
+#### Passo 1: Instalar o Postman
+
+Se você ainda não tem o Postman instalado, pode baixá-lo e instalá-lo a partir do site oficial do Postman.
+
+#### Passo 2: Iniciar o Postman
+
+Após a instalação, inicie o Postman.
+
+#### Passo 3: Criar uma Coleção
+
+No Postman, as solicitações são organizadas em coleções. Vamos criar uma coleção para suas solicitações da GenRoom:
+
+* Clique na guia "Coleções" no canto superior esquerdo.
+* Clique em "Nova Coleção".
+* Dê um nome para a coleção, por exemplo, "GenRoom API".
+* Opcionalmente, você pode adicionar uma descrição.
+* Clique em "Criar".
+
+#### Passo 4: Adicionar uma Solicitação
+
+Agora que temos uma coleção, vamos adicionar uma solicitação:
+
+* Selecione a coleção "GenRoom API" que você acabou de criar.
+* Clique no botão "Adicionar Solicitação".
+* Dê um nome para a solicitação, por exemplo, "Obter Todas as Salas".
+* No campo "Método", selecione o método HTTP apropriado para a solicitação, por exemplo, "GET".
+* No campo "URL", insira a URL da sua API GenRoom local, por exemplo, "http://localhost:5001/rooms" (certifique-se de que o servidor GenRoom esteja em execução).
+* Clique em "Salvar para GenRoom API".
+
+#### Passo 5: Enviar a Solicitação
+
+Agora que você tem uma solicitação configurada:
+
+* Clique na solicitação que você acabou de criar ("Obter Todas as Salas").
+* Clique no botão "Enviar".
+* Você deve receber uma resposta da sua API GenRoom, que será exibida na parte inferior da janela do Postman.
+
+#### Passo 6: Adicionar mais Solicitações (Opcional)
+
+Você pode repetir o "Passo 4" para adicionar mais solicitações à sua coleção GenRoom API, como "Criar Nova Sala", "Reservar Sala" e assim por diante, dependendo de quantos endpoints sua API GenRoom possui.
+
+### Passo 7: Exportar a Coleção (Opcional)
+
+Se desejar, você pode exportar sua coleção GenRoom API para compartilhá-la com outros ou usá-la em outro local:
+
+* Clique com o botão direito na coleção "GenRoom API" na barra lateral.
+* Selecione "Exportar".
+* Escolha um formato de exportação (geralmente JSON é uma boa escolha).
+* Escolha o local onde deseja salvar o arquivo exportado.
+* Clique em "Salvar".
+
+### editando o postman
+
+Coloque a requisição desejada, certifique-se de que a solicitação está configurada corretamente e que o método HTTP (por exemplo, GET, POST) e a URL (por exemplo, http://localhost:5001/api/rooms) estão configurados conforme necessário.
+
+Clique na guia "Headers" (Cabeçalhos) na parte superior da solicitação no Postman.
+
+Certifique-se de que você tenha um cabeçalho "Content-Type" configurado com o valor "application/json". Se não existir, adicione-o.
+adicione no Body da requisição Raw e depois Json e adicione: 
+{
+
+}
+
+algumas requisições vão precisar de um Body com mais detalhes, elas estão no print de cada requisição acima
