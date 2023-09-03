@@ -1,4 +1,5 @@
 # Importe as bibliotecas necessárias para o Swagger
+import sys
 from flask import Blueprint, jsonify, request
 from flask_restful_swagger import swagger
 from Domain.Entities.room import Room
@@ -31,8 +32,10 @@ def create_new_room():
     data = request.get_json()
     name = data.get('name')
     room_type = data.get('room_type')
+    capacity = data.get('capacity')  # Nova informação - Capacidade da sala
+    description = data.get('description')  # Nova informação - Descrição da sala
 
-    new_room = room_service.create_room(name, room_type)
+    new_room = room_service.create_room(name, room_type, capacity, description)  # Atualize o método create_room
     return jsonify(new_room.to_json()), 201
 
 # Documentação do endpoint POST /rooms/{room_id}/reserve
@@ -70,7 +73,13 @@ def get_occupied_rooms():
 def get_room_details(room_id):
     room_details = room_service.get_room_details(room_id)
     if room_details:
-        return jsonify(room_details), 200
+        return jsonify({
+            'id': room_details['id'],
+            'name': room_details['name'],
+            'is_occupied': room_details['is_occupied'],
+            'capacity': room_details['capacity'],  # Nova informação - Capacidade da sala
+            'description': room_details['description']  # Nova informação - Descrição da sala
+        }), 200
     return jsonify({'error': 'Room not found'}), 404
 
 # Documentação do endpoint DELETE /rooms/{room_id}
@@ -120,8 +129,24 @@ def update_room_name(room_id):
     nickname='getRoomsByType'
 )
 def get_rooms_by_type(room_type):
-    rooms = room_service.get_rooms_by_type(room_type)
-    return jsonify([room.to_json() for room in rooms])
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    rooms, total_rooms = room_service.get_rooms_by_type(room_type, page, per_page)  # Atualize o método get_rooms_by_type
+    pagination_info = {
+        'page': page,
+        'per_page': per_page,
+        'total_rooms': total_rooms
+    }
+    min_capacity = request.args.get('min_capacity', default=0, type=int)
+    max_capacity = request.args.get('max_capacity', default=sys.maxsize, type=int)
+
+    rooms, total_rooms = room_service.get_rooms_by_type(room_type, page, per_page, min_capacity, max_capacity)
+    
+    return jsonify({
+        'rooms': [room.to_detailed_json() for room in rooms],  # Usando o método to_detailed_json
+        'pagination_info': pagination_info
+    })
 
 # Documentação do endpoint POST /rooms/{room_id}/reserve-by-period
 @room_app.route('/rooms/<string:room_id>/reserve-by-period', methods=['POST'])
@@ -134,8 +159,11 @@ def reserve_room_by_period(room_id):
     data = request.get_json()
     start_time = data.get('start_time')
     end_time = data.get('end_time')
+    
     result = room_service.reserve_room_by_period(room_id, start_time, end_time)
-
+    
     if 'error' in result:
         return jsonify(result), 400
-    return jsonify(result), 200
+    
+    room_details = room_service.get_room_details(room_id)  # Obtenha informações detalhadas após a reserva
+    return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200

@@ -12,10 +12,10 @@ class RoomService:
         rooms = self.room_repository.find_all()
         return [Room(room.id, room.name, room.room_type) for room in rooms if hasattr(room, 'room_type')]
     
-    def create_room(self, name, room_type):
-        new_room = self.room_repository.create_room(name, room_type)
-        return Room(new_room.id, new_room.name, new_room.room_type)
-    
+    def create_room(self, name, room_type, capacity, description):
+        new_room = self.room_repository.create_room(name, room_type, capacity, description)
+        return Room(new_room.id, new_room.name, new_room.room_type, capacity, description)
+
     def get_room_by_id(self, room_id):
         room = self.room_repository.find_by_id(room_id)
         if room:
@@ -48,7 +48,9 @@ class RoomService:
             return {
                 'id': room.id,
                 'name': room.name,
-                'is_occupied': room.is_occupied
+                'is_occupied': room.is_occupied,
+                'capacity': room.capacity,  # Inclua a capacidade da sala aqui
+                'description': room.description  # Inclua a descrição da sala aqui
             }
         return None
     
@@ -70,9 +72,18 @@ class RoomService:
             return Room(room.id, room.name)
         return None
     
-    def get_rooms_by_type(self, room_type):
-        rooms = self.room_repository.find_by_type(room_type)
-        return [Room(room.id, room.name, room.room_type) for room in rooms]
+    def get_rooms_by_type(self, room_type, page=1, per_page=10):
+        # Obtém todas as salas do tipo especificado
+        all_rooms = self.room_repository.find_by_type(room_type)
+
+        # Calcula o índice inicial e final das salas na página atual
+        start_index = (page - 1) * per_page
+        end_index = start_index + per_page
+
+        # Obtém as salas para a página atual
+        rooms_on_page = all_rooms[start_index:end_index]
+
+        return rooms_on_page
     
     def reserve_room_by_period(self, room_id, start_time, end_time):
         room = self.find_by_id(room_id)
