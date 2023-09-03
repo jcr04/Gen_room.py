@@ -3,9 +3,8 @@ from flask import Flask
 from Presentation.Controllers.room_controller import room_app
 from flask import Flask
 from flask_restful import Api
-from flask_restful_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
-
+from flask_restful_swagger import swagger
 app = Flask(__name__)
 api = Api(app)
 
@@ -23,7 +22,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config={
-        'app_name': "Sua API de Salas"
+        'app_name': "GenRoom: Sua API de Salas"
     }
 )
 
