@@ -11,7 +11,7 @@ room_service = RoomService()
 @room_app.route('/rooms', methods=['GET'])
 @swagger.operation(
     notes='Obtém a lista de todas as salas',
-    responseClass=[Room.__name__],  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
     nickname='getRooms'
 )
 def get_rooms():
@@ -52,7 +52,7 @@ def reserve_room(room_id):
 @room_app.route('/rooms/occupied', methods=['GET'])
 @swagger.operation(
     notes='Obtém a lista de salas ocupadas',
-    responseClass=[Room.__name__],  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
     nickname='getOccupiedRooms'
 )
 def get_occupied_rooms():
@@ -89,7 +89,7 @@ def delete_room(room_id):
 @room_app.route('/rooms/available', methods=['GET'])
 @swagger.operation(
     notes='Obtém a lista de salas disponíveis',
-    responseClass=[Room.__name__],  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
     nickname='getAvailableRooms'
 )
 def get_available_rooms():
@@ -115,7 +115,7 @@ def update_room_name(room_id):
 @room_app.route('/rooms/by-type/<string:room_type>', methods=['GET'])
 @swagger.operation(
     notes='Obtém a lista de salas por tipo',
-    responseClass=[Room.__name__],  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
     nickname='getRoomsByType'
 )
 def get_rooms_by_type(room_type):
