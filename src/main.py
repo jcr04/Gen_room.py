@@ -30,5 +30,4 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 app.register_blueprint(room_app, url_prefix='/api')
 
 if __name__ == '__main__':
-    print("API de Salas em execução...")
     app.run(host='0.0.0.0', port=5000, debug=True)
