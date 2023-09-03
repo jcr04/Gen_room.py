@@ -1,6 +1,8 @@
 # Genroom - Sistema de Gerenciamento de Salas para Faculdades
 O Genroom é um sistema de gerenciamento de salas desenvolvido para instituições de ensino superior, como faculdades e universidades. Ele foi projetado para simplificar a administração e a reserva de salas de aula, tornando a experiência acadêmica mais eficiente e organizada.
 
+### Leia CodeDoc.md para melhor entendimento técnico da aplicação.
+
 ## Arquitetura de Camadas: Interface do Usuário, Lógica de Negócios e Armazenamento de Dados
 O Genroom adota uma arquitetura de camadas que separa claramente as responsabilidades do sistema, garantindo uma organização eficaz. Cada camada possui um propósito específico:
 ### Interface do Usuário (Presentation)
