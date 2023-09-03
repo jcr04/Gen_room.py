@@ -15,11 +15,6 @@ room_service = RoomService()
     nickname='getRooms'
 )
 def get_rooms():
-    """
-    Obtém a lista de todas as salas.
-
-    Retorna a lista de todas as salas disponíveis.
-    """
     rooms = room_service.get_all_rooms()
     rooms_json = [room.to_json() for room in rooms]
     return jsonify(rooms_json)
@@ -32,11 +27,6 @@ def get_rooms():
     nickname='createNewRoom'
 )
 def create_new_room():
-    """
-    Cria uma nova sala.
-
-    Cria uma nova sala com base nos dados fornecidos.
-    """
     data = request.get_json()
     name = data.get('name')
     room_type = data.get('room_type')
@@ -52,18 +42,11 @@ def create_new_room():
     nickname='reserveRoom'
 )
 def reserve_room(room_id):
-    """
-    Reserva uma sala.
-
-    Reserva uma sala com base no ID da sala fornecido.
-    """
     result = room_service.reserve_room(room_id)
     if result:
         room_details = room_service.get_room_details(room_id)
         return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200
     return jsonify({'error': 'Room not found or already occupied'}), 404
-
-# Continue documentando os outros endpoints da mesma forma
 
 # Documentação do endpoint GET /rooms/occupied
 @room_app.route('/rooms/occupied', methods=['GET'])
@@ -73,11 +56,6 @@ def reserve_room(room_id):
     nickname='getOccupiedRooms'
 )
 def get_occupied_rooms():
-    """
-    Obtém a lista de salas ocupadas.
-
-    Retorna a lista de todas as salas que estão atualmente ocupadas.
-    """
     occupied_rooms = room_service.get_occupied_rooms()
     return jsonify(occupied_rooms)
 
@@ -89,11 +67,6 @@ def get_occupied_rooms():
     nickname='getRoomDetails'
 )
 def get_room_details(room_id):
-    """
-    Obtém detalhes de uma sala específica.
-
-    Retorna os detalhes de uma sala com base no ID da sala fornecido.
-    """
     room_details = room_service.get_room_details(room_id)
     if room_details:
         return jsonify(room_details), 200
@@ -107,11 +80,6 @@ def get_room_details(room_id):
     nickname='deleteRoom'
 )
 def delete_room(room_id):
-    """
-    Exclui uma sala.
-
-    Exclui uma sala com base no ID da sala fornecido.
-    """
     result = room_service.delete_room(room_id)
     if result:
         return jsonify({'message': 'Room deleted successfully'}), 200
@@ -125,11 +93,6 @@ def delete_room(room_id):
     nickname='getAvailableRooms'
 )
 def get_available_rooms():
-    """
-    Obtém a lista de salas disponíveis.
-
-    Retorna a lista de todas as salas que estão atualmente disponíveis.
-    """
     available_rooms = room_service.get_available_rooms()
     return jsonify([room.to_json() for room in available_rooms])
 
@@ -141,11 +104,6 @@ def get_available_rooms():
     nickname='updateRoomName'
 )
 def update_room_name(room_id):
-    """
-    Atualiza o nome de uma sala.
-
-    Atualiza o nome de uma sala com base no ID da sala fornecido e no novo nome fornecido.
-    """
     data = request.get_json()
     new_name = data.get('new_name')
     updated_room = room_service.update_room_name(room_id, new_name)
@@ -161,11 +119,6 @@ def update_room_name(room_id):
     nickname='getRoomsByType'
 )
 def get_rooms_by_type(room_type):
-    """
-    Obtém a lista de salas por tipo.
-
-    Retorna a lista de todas as salas que correspondem ao tipo fornecido.
-    """
     rooms = room_service.get_rooms_by_type(room_type)
     return jsonify([room.to_json() for room in rooms])
 
@@ -177,11 +130,6 @@ def get_rooms_by_type(room_type):
     nickname='reserveRoomByPeriod'
 )
 def reserve_room_by_period(room_id):
-    """
-    Reserva uma sala por período.
-
-    Reserva uma sala com base no ID da sala fornecido e no período especificado.
-    """
     data = request.get_json()
     start_time = data.get('start_time')
     end_time = data.get('end_time')
