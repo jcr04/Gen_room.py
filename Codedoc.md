@@ -160,7 +160,7 @@ Para executar o projeto, siga estas etapas:
 * Execute o arquivo main.py com o comando python main.py.
 * A API estará disponível em http://localhost:5001/api.
 
-### Executaando o Postman:
+### Executando o Postman:
 #### Passo 1: Instalar o Postman
 
 Se você ainda não tem o Postman instalado, pode baixá-lo e instalá-lo a partir do site oficial do Postman.
