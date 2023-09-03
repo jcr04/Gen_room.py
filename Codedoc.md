@@ -125,7 +125,7 @@ Método __name__ == '__main__'
 Este bloco de código inicia o servidor Flask quando o script é executado diretamente.
 
 * Host: 0.0.0.0
-* Porta: 5000
+* Porta: 5001
 * Modo de Depuração: True (para depuração, você pode definir como False em produção)
 
 ## Endpoint da API
