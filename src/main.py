@@ -4,6 +4,7 @@ from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from Presentation.Controllers.room_controller import room_app
 
+
 app = Flask(__name__)
 api = Api(app)
 
