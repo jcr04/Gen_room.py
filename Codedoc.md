@@ -133,7 +133,9 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 A API oferece os seguintes endpoints:
 
 * /api/rooms (GET): Retorna todas as salas disponíveis.
+* - ![Screenshot_1](https://github.com/jcr04/Gen_room.py/assets/70778525/6676ecd9-26ec-4de0-8378-e0758951f81e)
 * /api/rooms (POST): Cria uma nova sala.
+* - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/72fa2c54-9d8b-4779-885e-6c9cd1860c00)
 * /api/rooms/<string:room_id>/reserve (POST): Reserva uma sala com base em seu ID.
 * /api/rooms/occupied (GET): Retorna todas as salas ocupadas.
 * /api/rooms/<string:room_id> (GET): Retorna detalhes de uma sala com base em seu ID.
