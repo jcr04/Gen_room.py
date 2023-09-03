@@ -1,5 +1,5 @@
 class Room:
-    def __init__(self, id, name, room_type, is_occupied=False):
+    def __init__(self, id, name, room_type=None, is_occupied=False):
         self.id = id
         self.name = name
         self.room_type = room_type

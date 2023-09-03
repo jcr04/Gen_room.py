@@ -1,19 +1,12 @@
 # Importe as bibliotecas necessárias para o Swagger
-from flask import Blueprint, app, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_restful_swagger import swagger
-from Application.Services.room_service import RoomService
 from Domain.Entities.room import Room
-from flask_restplus import Api, Resource
+from Application.Services.room_service import RoomService
 
-api = Api(app)
 
 room_app = Blueprint('room_app', __name__)
 room_service = RoomService()
-
-@api.route('/static/swagger.json')
-class SwaggerResource(Resource):
-    def get(self):
-        return api.__schema__
 
 # Documentação do endpoint GET /rooms
 @room_app.route('/rooms', methods=['GET'])
