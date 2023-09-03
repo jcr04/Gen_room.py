@@ -144,6 +144,7 @@ A API oferece os seguintes endpoints:
 
 * /api/rooms/<string:room_id> (DELETE): Exclui uma sala com base em seu ID.
 * /api/rooms/available (GET): Retorna todas as salas disponíveis que não estão ocupadas.
+* - ![Screenshot_5](https://github.com/jcr04/Gen_room.py/assets/70778525/51bf0a09-8f7f-41e7-aa41-19ed0cc01d73)
 * /api/rooms/<string:room_id>/update-name (PUT): Atualiza o nome de uma sala com base em seu ID.
 * /api/rooms/by-type/<string:room_type> (GET): Retorna todas as salas de um tipo específico.
 * /api/rooms/<string:room_id>/reserve-by-period (POST): Reserva uma sala com base em seu ID durante um período especificado.
