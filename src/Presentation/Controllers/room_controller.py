@@ -120,12 +120,12 @@ def get_available_rooms():
     responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
     nickname='updateRoomName'
 )
-def update_room_name(room_id):
+def update_room(room_id):
     data = request.get_json()
-    new_name = data.get('new_name')
-    updated_room = room_service.update_room_name(room_id, new_name)
+    updated_room = room_service.update_room(room_id, data)
+    
     if updated_room:
-        return jsonify({'message': 'Room name updated successfully', 'room': updated_room.to_json()}), 200
+        return jsonify({'message': 'Room updated successfully', 'room': updated_room.to_json()}), 200
     return jsonify({'error': 'Room not found'}), 404
 
 # Documentação do endpoint GET /rooms/by-type/{room_type}

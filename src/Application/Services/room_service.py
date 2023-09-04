@@ -75,11 +75,18 @@ class RoomService:
         available_rooms = [room for room in self.room_repository.find_all() if not room.is_occupied]
         return [Room(room.id, room.name) for room in available_rooms]
     
-    def update_room_name(self, room_id, new_name):
+    def update_room(self, room_id, data):
         room = self.room_repository.find_by_id(room_id)
+    
         if room:
-            room.name = new_name
-            return Room(room.id, room.name)
+            if 'name' in data:
+                room.name = data['name']
+            if 'capacity' in data:
+                room.capacity = data['capacity']
+            if 'description' in data:
+                room.description = data['description']
+                
+            return room
         return None
     
     def get_rooms_by_type(self, room_type, page=1, per_page=10):

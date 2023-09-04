@@ -25,10 +25,17 @@ class RoomRepository:
     def delete_room(self, room):
         self.rooms.remove(room)
         
-    def update_room_name(self, room_id, new_name):
-        room = self.find_by_id(room_id)
+    def update_room(self, room_id, data):
+        room = self.room_repository.find_by_id(room_id)
+    
         if room:
-            room.name = new_name
+            if 'name' in data:
+                room.name = data['name']
+            if 'capacity' in data:
+                room.capacity = data['capacity']
+            if 'description' in data:
+                room.description = data['description']
+                
             return room
         return None
 
