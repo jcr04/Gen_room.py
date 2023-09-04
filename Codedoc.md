@@ -135,14 +135,14 @@ A API oferece os seguintes endpoints:
 * /api/rooms (GET): Retorna todas as salas disponíveis.
 * - ![Screenshot_3](https://github.com/jcr04/Gen_room.py/assets/70778525/e0fb7551-2564-4597-ab4f-80e4bc41d43b)
 * /api/rooms (POST): Cria uma nova sala.
-* - ![Screenshot_1](https://github.com/jcr04/Gen_room.py/assets/70778525/6676ecd9-26ec-4de0-8378-e0758951f81e)
+* - ![Screenshot_11](https://github.com/jcr04/Gen_room.py/assets/70778525/2534ca8f-b6d4-4d97-8f35-3ebe7827bdd5)
 * /api/rooms/<string:room_id>/reserve (POST): Reserva uma sala com base em seu ID.
 * - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/72fa2c54-9d8b-4779-885e-6c9cd1860c00)
 * /api/rooms/occupied (GET): Retorna todas as salas ocupadas.
 * - ![Screenshot_9](https://github.com/jcr04/Gen_room.py/assets/70778525/4be1fa9f-25ba-438b-a276-a6291bb4130a)
 * /api/rooms/<string:room_id> (GET): Retorna detalhes de uma sala com base em seu ID.
-* - ![Screenshot_4](https://github.com/jcr04/Gen_room.py/assets/70778525/98471530-8c49-4133-b83f-8ed7de75eef2)
-* - ![Screenshot_10](https://github.com/jcr04/Gen_room.py/assets/70778525/db383a3f-fab0-4ed7-a0c5-37342d4c93b6)
+* - ![Screenshot_11](https://github.com/jcr04/Gen_room.py/assets/70778525/fcc8beb7-a2d0-484b-96fd-64a897269861)
+* - ![Screenshot_12](https://github.com/jcr04/Gen_room.py/assets/70778525/4b324287-c89f-4802-a597-8fa47b1970f2)
 * /api/rooms/<string:room_id> (DELETE): Exclui uma sala com base em seu ID.
 * - ![Screenshot_7](https://github.com/jcr04/Gen_room.py/assets/70778525/ffade6f0-b184-4222-ab26-e11b862550a2)
 * - ![Screenshot_8](https://github.com/jcr04/Gen_room.py/assets/70778525/d2a5c38c-854b-4694-80f8-98a0fb7017c3)
