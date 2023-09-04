@@ -12,9 +12,19 @@ class RoomService:
         rooms = self.room_repository.find_all()
         return [Room(room.id, room.name, room.room_type) for room in rooms if hasattr(room, 'room_type')]
     
-    def create_room(self, name, room_type, capacity, description):
-        new_room = self.room_repository.create_room(name, room_type, capacity, description)
-        return Room(new_room.id, new_room.name, new_room.room_type, capacity, description)
+    def create_room(self, name, room_type, capacity, description, room_category):
+        if not name or not room_type or not capacity or not description:
+            return {'error': 'Todos os campos (name, room_type, capacity e description) são obrigatórios.'}
+
+        if not isinstance(capacity, int) or capacity <= 0:
+            return {'error': 'A capacidade deve ser um número inteiro positivo.'}
+
+        valid_room_types = ['Sala-Aula', 'Sala-Interativa', "Laboratórios", "Auditórios", "Cozinhas" ]  # Adicione os tipos válidos aqui
+        if room_type not in valid_room_types:
+            return {'error': 'O tipo da sala é inválido. Tipos válidos: Sala-Aula, Sala-Interativa, Laboratórios, Auditórios, Cozinhas.'}
+
+        new_room = self.room_repository.create_room(name, room_type, capacity, description, room_category)  # Atualize o método create_room
+        return Room(new_room.id, new_room.name, new_room.room_type, capacity, description, room_category)
 
     def get_room_by_id(self, room_id):
         room = self.room_repository.find_by_id(room_id)

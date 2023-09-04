@@ -25,18 +25,25 @@ def get_rooms():
 @room_app.route('/rooms', methods=['POST'])
 @swagger.operation(
     notes='Cria uma nova sala',
-    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,  
     nickname='createNewRoom'
 )
 def create_new_room():
     data = request.get_json()
     name = data.get('name')
     room_type = data.get('room_type')
-    capacity = data.get('capacity')  # Nova informação - Capacidade da sala
-    description = data.get('description')  # Nova informação - Descrição da sala
+    capacity = data.get('capacity')
+    description = data.get('description')
+    room_category = data.get('room_category')  # Adicione o campo 'room_category'
 
-    new_room = room_service.create_room(name, room_type, capacity, description)  # Atualize o método create_room
-    return jsonify(new_room.to_json()), 201
+    if not name or not room_type or not capacity or not description or not room_category:
+        return jsonify({'error': 'Todos os campos (name, room_type, capacity, description e room_category) são obrigatórios.'}), 400
+
+    try:
+        new_room = room_service.create_room(name, room_type, capacity, description, room_category)  # Atualize o método create_room
+        return jsonify(new_room.to_json()), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Documentação do endpoint POST /rooms/{room_id}/reserve
 @room_app.route('/rooms/<string:room_id>/reserve', methods=['POST'])
