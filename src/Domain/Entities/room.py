@@ -1,12 +1,12 @@
 class Room:
-    def __init__(self, id, name, room_type=None, is_occupied=False, capacity=None, description=None, room_category=None):
+    def __init__(self, id, name, room_type=None, capacity=None, description=None, room_category=None):
         self.id = id
         self.name = name
         self.room_type = room_type
-        self.is_occupied = is_occupied
         self.capacity = capacity
         self.description = description
         self.room_category = room_category  # Adicione o campo room_category
+        self.is_occupied = False  # Defina is_occupied como False por padrão
         self.reservations = []
 
     def to_json(self):

@@ -41,7 +41,7 @@ class RoomService:
 
     def get_occupied_rooms(self):
         occupied_rooms = [room for room in self.room_repository.find_all() if room.is_occupied]
-        return [Room(room.id, room.name) for room in occupied_rooms]
+        return [{'room': Room(room.id, room.name).to_json(), 'is_occupied': True} for room in occupied_rooms]
     
     def reserve_room(self, room_id):
         room = self.room_repository.find_by_id(room_id)

@@ -68,7 +68,7 @@ def reserve_room(room_id):
 )
 def get_occupied_rooms():
     occupied_rooms = room_service.get_occupied_rooms()
-    return jsonify([room.to_json() for room in occupied_rooms])
+    return jsonify(occupied_rooms)
 
 # Documentação do endpoint GET /rooms/{room_id}
 @room_app.route('/rooms/<string:room_id>', methods=['GET'])
