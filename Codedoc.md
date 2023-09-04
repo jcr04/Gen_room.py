@@ -137,9 +137,11 @@ A API oferece os seguintes endpoints:
 * /api/rooms (POST): Cria uma nova sala.
 * - ![Screenshot_11](https://github.com/jcr04/Gen_room.py/assets/70778525/2534ca8f-b6d4-4d97-8f35-3ebe7827bdd5)
 * /api/rooms/<string:room_id>/reserve (POST): Reserva uma sala com base em seu ID.
-* - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/72fa2c54-9d8b-4779-885e-6c9cd1860c00)
+* - ![Screenshot_16](https://github.com/jcr04/Gen_room.py/assets/70778525/2c6576db-eb8e-43ff-b6d0-9dc72a49b981)
 * /api/rooms/occupied (GET): Retorna todas as salas ocupadas.
-* - ![Screenshot_9](https://github.com/jcr04/Gen_room.py/assets/70778525/4be1fa9f-25ba-438b-a276-a6291bb4130a)
+* - ![Screenshot_15](https://github.com/jcr04/Gen_room.py/assets/70778525/bc254d91-0672-4d2d-8fd7-c09844e4cd83)
+* - ![Screenshot_16](https://github.com/jcr04/Gen_room.py/assets/70778525/941f07dd-a34b-44be-ab5d-4eae02e1b9f5)
+* - ![Screenshot_17](https://github.com/jcr04/Gen_room.py/assets/70778525/efc219e0-e33f-4157-bcb9-cd2695a4c210)
 * /api/rooms/<string:room_id> (GET): Retorna detalhes de uma sala com base em seu ID.
 * - ![Screenshot_11](https://github.com/jcr04/Gen_room.py/assets/70778525/fcc8beb7-a2d0-484b-96fd-64a897269861)
 * - ![Screenshot_12](https://github.com/jcr04/Gen_room.py/assets/70778525/4b324287-c89f-4802-a597-8fa47b1970f2)
