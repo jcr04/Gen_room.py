@@ -89,28 +89,22 @@ class RoomService:
             return room
         return None
     
-    def get_rooms_by_type(self, room_type, page=1, per_page=10):
-        # Obtém todas as salas do tipo especificado
-        all_rooms = self.room_repository.find_by_type(room_type)
+    def get_rooms_by_type(self, room_type):
+    # Consulte o repositório para buscar salas por tipo
+        rooms = self.room_repository.find_by_type(room_type)
 
-        # Calcula o índice inicial e final das salas na página atual
-        start_index = (page - 1) * per_page
-        end_index = start_index + per_page
-
-        # Obtém as salas para a página atual
-        rooms_on_page = all_rooms[start_index:end_index]
-
-        return rooms_on_page
+        return rooms
     
     def reserve_room_by_period(self, room_id, start_time, end_time):
-        room = self.find_by_id(room_id)
+        room = self.room_repository.find_by_id(room_id)
 
         if room is None:
             return {'error': 'Room not found'}
 
         try:
-            start_datetime = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-            end_datetime = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+            # Ajuste o formato da data para dd/mm/yyyy HH:MM:SS
+            start_datetime = datetime.datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
+            end_datetime = datetime.datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
         except ValueError:
             return {'error': 'Invalid date format'}
 
@@ -127,6 +121,7 @@ class RoomService:
         })
 
         return {'message': 'Room reserved successfully'}
+
     
     def find_by_id(self, room_id):
         for room in self.rooms:

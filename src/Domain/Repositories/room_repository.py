@@ -7,9 +7,9 @@ class RoomRepository:
         self.rooms = []
 
         # Adicione algumas salas diretamente no construtor
-        self.create_room("Sala 101", "Tipo da Sala 1", 10, "Sala de reunião para 10 pessoas")
-        self.create_room("Sala 102", "Tipo da Sala 2", 8, "Sala de conferência para 8 pessoas")
-        self.create_room("Sala 103", "Tipo da Sala 1", 6, "Sala de reunião para 6 pessoas")  # Adicione o tipo de sala aqui
+        self.create_room("Sala 101", "Sala-Aula", 10, "Sala de reunião para 10 pessoas")
+        self.create_room("Sala 102", "Sala-Aula", 8, "Sala de conferência para 8 pessoas")
+        self.create_room("Sala 103", "Sala-Aula", 6, "Sala de reunião para 6 pessoas")  # Adicione o tipo de sala aqui
         
     def find_all(self):
        return self.rooms
@@ -56,7 +56,7 @@ class RoomRepository:
         return True  # Sala reservada com sucesso
     
     def reserve_room_by_period(self, room_id, start_time, end_time):
-        room = self.room_repository.find_by_id(room_id)
+        room = self.find_by_id(room_id)
         if room:
             start_datetime = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
             end_datetime = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
@@ -64,7 +64,7 @@ class RoomRepository:
             if start_datetime >= end_datetime:
                 return {'error': 'Invalid time period'}
 
-            result = self.room_repository.reserve_room(room, start_datetime, end_datetime)
+            result = self.reserve_room(room, start_datetime, end_datetime)
 
             if result:
                 return {'message': 'Room reserved successfully'}

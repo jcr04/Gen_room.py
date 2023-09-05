@@ -136,41 +136,41 @@ def update_room(room_id):
     nickname='getRoomsByType'
 )
 def get_rooms_by_type(room_type):
-    page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
+    # Verifique se o tipo de sala fornecido é válido
+    valid_room_types = ["Sala-Aula", "Sala-Interativa", "Laboratórios", "Auditórios", "Cozinhas"]
+    if room_type not in valid_room_types:
+        return jsonify({'error': 'Tipo de sala inválido.'}), 400
 
-    rooms, total_rooms = room_service.get_rooms_by_type(room_type, page, per_page)  # Atualize o método get_rooms_by_type
-    pagination_info = {
-        'page': page,
-        'per_page': per_page,
-        'total_rooms': total_rooms
-    }
-    min_capacity = request.args.get('min_capacity', default=0, type=int)
-    max_capacity = request.args.get('max_capacity', default=sys.maxsize, type=int)
+    # Chame o serviço para buscar as salas por tipo
+    rooms = room_service.get_rooms_by_type(room_type)
 
-    rooms, total_rooms = room_service.get_rooms_by_type(room_type, page, per_page, min_capacity, max_capacity)
-    
-    return jsonify({
-        'rooms': [room.to_detailed_json() for room in rooms],  # Usando o método to_detailed_json
-        'pagination_info': pagination_info
-    })
+    if not rooms:
+        return jsonify({'message': 'Nenhuma sala encontrada para este tipo.'}), 404
+
+    # Converte as salas em JSON
+    rooms_json = [room.to_detailed_json() for room in rooms]
+
+    return jsonify({'rooms': rooms_json}), 200
 
 # Documentação do endpoint POST /rooms/{room_id}/reserve-by-period
 @room_app.route('/rooms/<string:room_id>/reserve-by-period', methods=['POST'])
 @swagger.operation(
     notes='Reserva uma sala por período',
-    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
+    responseClass=Room.__name__,
     nickname='reserveRoomByPeriod'
 )
 def reserve_room_by_period(room_id):
     data = request.get_json()
     start_time = data.get('start_time')
     end_time = data.get('end_time')
-    
+
+    if not start_time or not end_time:
+        return jsonify({'error': 'Both start_time and end_time are required.'}), 400
+
     result = room_service.reserve_room_by_period(room_id, start_time, end_time)
-    
+
     if 'error' in result:
         return jsonify(result), 400
-    
-    room_details = room_service.get_room_details(room_id)  # Obtenha informações detalhadas após a reserva
+
+    room_details = room_service.get_room_details(room_id)
     return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200
