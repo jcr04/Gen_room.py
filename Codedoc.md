@@ -154,6 +154,7 @@ A API oferece os seguintes endpoints:
 * - ![Screenshot_13](https://github.com/jcr04/Gen_room.py/assets/70778525/33c0061d-cce3-41e2-8bce-3d4ce9ea99b8)
 * - ![Screenshot_14](https://github.com/jcr04/Gen_room.py/assets/70778525/bdd4e4ae-0b34-44a4-b186-c97a410d0419)
 * /api/rooms/by-type/<string:room_type> (GET): Retorna todas as salas de um tipo específico.
+* - ![Screenshot_19](https://github.com/jcr04/Gen_room.py/assets/70778525/2116084d-1899-471b-8e4d-26d69a5380ed)
 * /api/rooms/<string:room_id>/reserve-by-period (POST): Reserva uma sala com base em seu ID durante um período especificado.
 * - ![Screenshot_18](https://github.com/jcr04/Gen_room.py/assets/70778525/eebe1038-8388-45b5-babc-df36208562a5)
 
