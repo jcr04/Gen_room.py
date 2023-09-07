@@ -15,7 +15,7 @@ class Room:
             'name': self.name,
             'room_type': self.room_type,
             'is_occupied': self.is_occupied,
-            'room_category': self.room_category  # Inclua o campo room_category na saída JSON
+            'room_category': self.room_category
         }
 
     def to_detailed_json(self):

@@ -3,6 +3,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from Presentation.Controllers.room_controller import room_app
+from Presentation.Controllers.resource_controller import resource_app
 
 
 app = Flask(__name__)
@@ -32,6 +33,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 app.register_blueprint(room_app, url_prefix='/api')
+app.register_blueprint(resource_app)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
