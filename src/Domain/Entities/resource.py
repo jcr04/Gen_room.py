@@ -13,5 +13,5 @@ class Resource:
             'name': self.name,
             'description': self.description,
             'is_reserved': self.is_reserved,
-            'reservations': self.reservations  # Incluímos as reservas aqui.
+            'reservations': self.reservations  # Adicione as reservas ao JSON
         }

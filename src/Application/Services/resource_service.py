@@ -6,7 +6,8 @@ class ResourceService:
     def __init__(self):
         self.resource_repository = ResourceRepository()
 
-    # ... Outros métodos existentes ...
+    def get_all_resources(self):
+        return self.resource_repository.find_all()
 
     def reserve_resource(self, resource_id):
         resource = self.resource_repository.find_by_id(resource_id)
