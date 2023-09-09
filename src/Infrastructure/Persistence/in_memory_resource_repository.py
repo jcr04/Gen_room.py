@@ -14,15 +14,27 @@ class InMemoryResourceRepository(ResourceRepository):
         return None
 
     def create_resource(self, name, description):
-        new_resource = ResourceRepository(str(len(self.resources) + 1), name, description)
+        new_resource = {
+            'id': str(len(self.resources) + 1),
+            'name': name,
+            'description': description,
+            'reservations': []  # Adicionamos uma lista vazia para as reservas deste recurso.
+        }
         self.resources.append(new_resource)
         return new_resource
 
-    def delete_resource(self, resource):
-        if resource in self.resources:
+    def delete_resource(self, resource_id):
+        resource = self.find_by_id(resource_id)
+        if resource:
             self.resources.remove(resource)
             return True
         return False
+
+    def get_resource_reservations(self, resource_id):
+        resource = self.find_by_id(resource_id)
+        if resource:
+            return resource['reservations']
+        return []
 
     def reserve_resource(self, resource_id, start_time, end_time):
         resource = self.find_by_id(resource_id)
