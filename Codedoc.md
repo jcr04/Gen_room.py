@@ -131,7 +131,7 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 ## Endpoint da API
 ### Requisições pelo Postman
 A API oferece os seguintes endpoints:
-
+### Room
 * /api/rooms (GET): Retorna todas as salas disponíveis.
 * - ![Screenshot_3](https://github.com/jcr04/Gen_room.py/assets/70778525/e0fb7551-2564-4597-ab4f-80e4bc41d43b)
 * /api/rooms (POST): Cria uma nova sala.
@@ -157,8 +157,9 @@ A API oferece os seguintes endpoints:
 * - ![Screenshot_19](https://github.com/jcr04/Gen_room.py/assets/70778525/2116084d-1899-471b-8e4d-26d69a5380ed)
 * /api/rooms/<string:room_id>/reserve-by-period (POST): Reserva uma sala com base em seu ID durante um período especificado.
 * - ![Screenshot_18](https://github.com/jcr04/Gen_room.py/assets/70778525/eebe1038-8388-45b5-babc-df36208562a5)
-
-
+## Resources
+* /api/resources
+* - ![Screenshot_1](https://github.com/jcr04/Gen_room.py/assets/70778525/43526a29-b8d6-439c-8a29-14634c9bf52e)
 Lembre-se de que para utilizar a API, você deve executar o script main.py e acessar os endpoints conforme necessário.
 
 ## Executando o Projeto
