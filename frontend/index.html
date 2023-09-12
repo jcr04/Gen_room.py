@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Gerenciamento de Recursos e Salas</title>
 </head>
+
 <body>
     <h1>Gerenciamento de Recursos e Salas</h1>
     <h2>Criar uma nova sala:</h2>
@@ -25,21 +27,25 @@
         <button type="submit">Criar Sala</button>
     </form>
 
+    <!-- Seção para visualizar a resposta da requisição GET -->
+    <h2>Salas Disponíveis:</h2>
+    <div id="roomList"></div>
+    <button id="getRoomsButton">Buscar Salas</button>
+
     <script>
-        // Captura o formulário de criação de sala
-        const createRoomForm = document.getElementById('createRoomForm');
-    
-        // Manipulador de evento para o envio do formulário
+        const roomDescription = document.getElementById('roomDescription').value;
+        const roomCategory = document.getElementById('roomCategory').value;
+
         createRoomForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Evita o comportamento padrão de envio do formulário
-    
-            // Captura os valores dos campos do formulário
+
+
             const roomName = document.getElementById('roomName').value;
             const roomType = document.getElementById('roomType').value;
             const roomCapacity = document.getElementById('roomCapacity').value;
             const roomDescription = document.getElementById('roomDescription').value;
             const roomCategory = document.getElementById('roomCategory').value;
-    
+
             // Monta os dados em um objeto JSON
             const formData = {
                 name: roomName,
@@ -48,7 +54,7 @@
                 description: roomDescription,
                 room_category: roomCategory
             };
-    
+
             // Envia uma solicitação POST para o backend (Flask)
             fetch('http://localhost:5001/api/rooms', {
                 method: 'POST',
@@ -57,22 +63,66 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                // Verifica se a criação foi bem-sucedida
-                if (data.error) {
-                    alert('Erro ao criar a sala: ' + data.error);
-                } else {
-                    alert('Sala criada com sucesso!');
-                    // Limpa os campos do formulário
-                    createRoomForm.reset();
+                .then(response => response.json())
+                .then(data => {
+                    // Verifica se a criação foi bem-sucedida
+                    if (data.error) {
+                        alert('Erro ao criar a sala: ' + data.error);
+                    } else {
+                        alert('Sala criada com sucesso!');
+                        // Limpa os campos do formulário
+                        createRoomForm.reset();
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar a solicitação:', error);
+                    alert('Erro ao criar a sala. Verifique o console para mais detalhes.');
+                });
+        });
+
+        // Função para buscar e exibir a lista de salas
+        function getRooms() {
+            fetch('http://localhost:5001/api/rooms', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch(error => {
-                console.error('Erro ao enviar a solicitação:', error);
-                alert('Erro ao criar a sala. Verifique o console para mais detalhes.');
-            });
-        });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Erro ao buscar salas:', data.error);
+                    } else {
+                        // Limpa a lista de salas
+                        roomList.innerHTML = '';
+
+                        if (Array.isArray(data.rooms)) {
+                            data.rooms.forEach(room => {
+                                const roomItem = document.createElement('div');
+                                roomItem.innerHTML = `
+                          <h3>${room.name}</h3>
+                          <p>Tipo: ${room.room_type}</p>
+                          <p>Capacidade: ${room.capacity}</p>
+                          <p>Descrição: ${room.description}</p>
+                          <p>Categoria: ${room.room_category}</p>
+                        `;
+                                roomList.appendChild(roomItem);
+                            });
+                        } else {
+                            console.error('Erro ao buscar salas: Dados inválidos recebidos');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar salas:', error);
+                });
+        }
+            // Chama a função para buscar e exibir a lista de salas quando a página carrega
+            window.addEventListener('load', getRooms)
+
+            const getRoomsButton = document.getElementById('getRoomsButton');
+            getRoomsButton.addEventListener('click', getRooms);
     </script>
 </body>
+
 </html>
