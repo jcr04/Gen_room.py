@@ -67,7 +67,7 @@ Para executar a aplicação, siga as seguintes etapas:
 ### exemplo: 
 ### criando uma sala via Front-end
 ![Screenshot_4](https://github.com/jcr04/Gen_room.py/assets/70778525/b87fe405-c0a7-4dde-a331-a28b5c4c6d19)
-### serve backend retorna requisição ao armazanamento 
+### serve backend retorna requisição ao armazenamento.
 ![Screenshot_5](https://github.com/jcr04/Gen_room.py/assets/70778525/fe153ec6-3639-4058-9f11-b87e92ac45c6)
 ![Screenshot_6](https://github.com/jcr04/Gen_room.py/assets/70778525/b02e3a75-0cac-4093-b118-e4a2e397d4d5)
 
