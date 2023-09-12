@@ -38,9 +38,37 @@ O Genroom implementa várias funcionalidades essenciais para o gerenciamento de 
 ### Como Executar a Aplicação
 Para executar a aplicação, siga as seguintes etapas:
 
-* Certifique-se de ter o Python instalado em seu sistema.
-* Navegue até o diretório raiz do projeto no terminal.
-* Execute o comando pip install Flask para instalar a biblioteca Flask (se ainda não estiver instalada).
-* Execute o comando python src/main.py para iniciar o servidor Flask.
-* Acesse a API através do endereço http://127.0.0.1:5001/api/.
-![Alt text](<Captura de tela 2023-09-02 140634.png>)
+### Iniciar o Servidor Python HTTP:
+* Você inicia um servidor HTTP Python executando o comando python -m http.server 8000 a partir do diretório onde o seu arquivo index.html está localizado.
+
+### Acessar o Frontend:
+* - Abra um navegador da web e vá para http://localhost:8000/index.html.
+* - Isso carregará a página da web (frontend) no navegador.
+
+### Preencher o Formulário:
+* No frontend, você preenche o formulário com informações sobre uma nova sala que deseja criar.
+* - Os campos do formulário são: Nome da Sala, Tipo da Sala, Capacidade, Descrição e Categoria.
+
+### Enviar a Solicitação:
+* Quando você clica no botão "Criar Sala", o JavaScript captura os dados do formulário.
+
+### Enviar uma Solicitação para o Backend:
+* O JavaScript usa a função fetch para enviar uma solicitação POST para o backend Flask no endpoint create_room (por exemplo, http://localhost:5001/api/rooms).
+* A solicitação inclui os dados do formulário em formato JSON.
+
+### Backend Processa a Solicitação:
+* O backend, que já tem o CORS configurado para permitir solicitações do frontend, recebe a solicitação.
+* - Ele processa os dados recebidos, cria uma nova sala no banco de dados ou armazenamento e envia uma resposta de volta para o frontend.
+
+### Frontend Recebe a Resposta:
+* O frontend aguarda a resposta do backend.
+* - Se a criação da sala for bem-sucedida, o frontend exibe uma mensagem de sucesso e limpa o formulário.
+* Se ocorrer um erro, o frontend exibe uma mensagem de erro.
+### exemplo: 
+### criando uma sala via Front-end
+![Screenshot_4](https://github.com/jcr04/Gen_room.py/assets/70778525/b87fe405-c0a7-4dde-a331-a28b5c4c6d19)
+### serve backend retorna requisição ao armazanamento 
+![Screenshot_5](https://github.com/jcr04/Gen_room.py/assets/70778525/fe153ec6-3639-4058-9f11-b87e92ac45c6)
+![Screenshot_6](https://github.com/jcr04/Gen_room.py/assets/70778525/b02e3a75-0cac-4093-b118-e4a2e397d4d5)
+
+
