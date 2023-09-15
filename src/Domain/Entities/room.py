@@ -1,5 +1,5 @@
 class Room:
-    def __init__(self, id, name, room_type=None, capacity=None, description=None, room_category=None):
+    def __init__(self, id, name, room_type=None, capacity=None, description=None, room_category=None, shift=None):
         self.id = id
         self.name = name
         self.room_type = room_type
@@ -8,6 +8,7 @@ class Room:
         self.room_category = room_category  # Adicione o campo room_category
         self.is_occupied = False  # Defina is_occupied como False por padrão
         self.reservations = []
+        self.shift = shift
 
     def to_json(self):
         return {
@@ -15,7 +16,8 @@ class Room:
             'name': self.name,
             'room_type': self.room_type,
             'is_occupied': self.is_occupied,
-            'room_category': self.room_category
+            'room_category': self.room_category,
+            'turno': self.shift
         }
 
     def to_detailed_json(self):
@@ -27,5 +29,6 @@ class Room:
             'capacity': self.capacity,
             'description': self.description,
             'room_category': self.room_category,  # Inclua o campo room_category na saída detalhada JSON
-            'reservations': self.reservations
+            'reservations': self.reservations,
+            'turno': self.shift
         }

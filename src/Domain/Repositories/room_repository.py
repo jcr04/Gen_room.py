@@ -7,18 +7,18 @@ class RoomRepository:
         self.rooms = []
 
         # Adicione algumas salas diretamente no construtor
-        self.create_room("Sala 101", "Sala-Aula", 10, "Sala de reunião para 10 pessoas")
-        self.create_room("Sala 102", "Sala-Aula", 8, "Sala de conferência para 8 pessoas")
-        self.create_room("Sala 103", "Sala-Aula", 6, "Sala de reunião para 6 pessoas")  # Adicione o tipo de sala aqui
-        
+        self.create_room("Sala 101", "Sala-Aula", 10, "Sala de reunião para 10 pessoas", shift="Matutino")
+        self.create_room("Sala 102", "Sala-Aula", 8, "Sala de conferência para 8 pessoas", shift="Vespertino")
+        self.create_room("Sala 103", "Sala-Aula", 6, "Sala de reunião para 6 pessoas", shift="Noturno")  # Adicione o tipo de sala aqui
+
     def find_all(self):
        return self.rooms
 
     def find_by_id(self, id):
         return next((room for room in self.rooms if room.id == id), None)
 
-    def create_room(self, name, room_type, capacity=None, description=None, room_category=None):
-        new_room = Room(id=str(len(self.rooms) + 1), name=name, room_type=room_type, capacity=capacity, description=description, room_category=room_category)
+    def create_room(self, name, room_type, capacity=None, description=None, room_category=None, shift=None):
+        new_room = Room(id=str(len(self.rooms) + 1), name=name, room_type=room_type, capacity=capacity, description=description, room_category=room_category, shift=shift)
         self.rooms.append(new_room)
         return new_room
     

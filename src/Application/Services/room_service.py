@@ -12,9 +12,9 @@ class RoomService:
         rooms = self.room_repository.find_all()
         return [Room(room.id, room.name, room.room_type) for room in rooms if hasattr(room, 'room_type')]
     
-    def create_room(self, name, room_type, capacity, description, room_category):
+    def create_room(self, name, room_type, capacity, description, room_category, shift):
         if not name or not room_type or not capacity or not description:
-            return {'error': 'Todos os campos (name, room_type, capacity e description) são obrigatórios.'}
+            return {'error': 'Todos os campos (name, room_type, capacity, description, room_category e shift) são obrigatórios.'}
 
         if not isinstance(capacity, int) or capacity <= 0:
             return {'error': 'A capacidade deve ser um número inteiro positivo.'}
@@ -23,8 +23,12 @@ class RoomService:
         if room_type not in valid_room_types:
             return {'error': 'O tipo da sala é inválido. Tipos válidos: Sala-Aula, Sala-Interativa, Laboratórios, Auditórios, Cozinhas.'}
 
-        new_room = self.room_repository.create_room(name, room_type, capacity, description, room_category)  # Atualize o método create_room
-        return Room(new_room.id, new_room.name, new_room.room_type, capacity, description, room_category)
+        valid_shifts = ['Matutino', 'Vespertino', 'Noturno']
+        if shift not in valid_shifts:
+            return {'error': 'O turno é inválido. Turnos válidos: Matutino, Vespertino, Noturno.'}
+        
+        new_room = self.room_repository.create_room(name, room_type, capacity, description, room_category, shift)
+        return Room(new_room.id, new_room.name, new_room.room_type, capacity, description, room_category, shift)
 
     def get_room_by_id(self, room_id):
         room = self.room_repository.find_by_id(room_id)
