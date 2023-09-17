@@ -1,5 +1,4 @@
-# Importe a classe Room do módulo correto
-import datetime
+from datetime import datetime
 from Domain.Entities.room import Room
 
 class RoomRepository:
@@ -26,8 +25,8 @@ class RoomRepository:
         self.rooms.remove(room)
         
     def update_room(self, room_id, data):
-        room = self.room_repository.find_by_id(room_id)
-    
+        room = self.find_by_id(room_id)
+            
         if room:
             if 'name' in data:
                 room.name = data['name']
