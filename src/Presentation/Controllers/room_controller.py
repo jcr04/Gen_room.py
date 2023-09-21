@@ -1,72 +1,42 @@
-# Importe as bibliotecas necessárias para o Swagger
-import sys
 from flask import Blueprint, jsonify, request
 from flask_restful_swagger import swagger
 from Domain.Entities.room import Room
 from Application.Services.room_service import RoomService
 
-
 room_app = Blueprint('room_app', __name__)
 room_service = RoomService()
 
-# Documentação do endpoint GET /rooms
+def handle_error(message, status_code):
+    return jsonify({'error': message}), status_code
+
 @room_app.route('/rooms', methods=['GET'])
-@swagger.operation(
-    notes='Obtém a lista de todas as salas',
-    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
-    nickname='getRooms'
-)
+@swagger.operation(notes='Get the list of all rooms', responseClass=Room.__name__, nickname='getRooms')
 def get_rooms():
     rooms = room_service.get_all_rooms()
     rooms_json = [room.to_json() for room in rooms]
     return jsonify(rooms_json)
 
-# Documentação do endpoint POST /rooms
 @room_app.route('/rooms', methods=['POST'])
-@swagger.operation(
-    notes='Cria uma nova sala',
-    responseClass=Room.__name__,  
-    nickname='createNewRoom'
-)
+@swagger.operation(notes='Create a new room', responseClass=Room.__name__, nickname='createNewRoom')
 def create_new_room():
-    data = request.get_json()
-    name = data.get('name')
-    room_type = data.get('room_type')
-    capacity = data.get('capacity')
-    description = data.get('description')
-    room_category = data.get('room_category')
-    shift = data.get('shift')
-
-    if not name or not room_type or not capacity or not description or not room_category:
-        return jsonify({'error': 'Todos os campos (name, room_type, capacity, description, room_category e shift) são obrigatórios.'}), 400
-
     try:
-        new_room = room_service.create_room(name, room_type, capacity, description, room_category, shift)
+        data = request.get_json()
+        new_room = room_service.create_room(**data)
         return jsonify(new_room.to_json()), 201
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return handle_error(str(e), 500)
 
-# Documentação do endpoint POST /rooms/{room_id}/reserve
 @room_app.route('/rooms/<string:room_id>/reserve', methods=['POST'])
-@swagger.operation(
-    notes='Reserva uma sala',
-    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
-    nickname='reserveRoom'
-)
+@swagger.operation(notes='Reserve a room', responseClass=Room.__name__, nickname='reserveRoom')
 def reserve_room(room_id):
     result = room_service.reserve_room(room_id)
     if result:
         room_details = room_service.get_room_details(room_id)
         return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200
-    return jsonify({'error': 'Room not found or already occupied'}), 404
+    return handle_error('Room not found or already occupied', 404)
 
-# Documentação do endpoint GET /rooms/occupied
 @room_app.route('/rooms/occupied', methods=['GET'])
-@swagger.operation(
-    notes='Obtém a lista de salas ocupadas',
-    responseClass=Room.__name__,  # Use a classe apropriada aqui (Room representa o exemplo)
-    nickname='getOccupiedRooms'
-)
+@swagger.operation(notes='Get the list of occupied rooms', responseClass=Room.__name__, nickname='getOccupiedRooms')
 def get_occupied_rooms():
     occupied_rooms = room_service.get_occupied_rooms()
     return jsonify(occupied_rooms)
