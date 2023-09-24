@@ -1,4 +1,4 @@
-from database import db
+from Infrastructure.database import db
 
 class RoomModel(db.Model):
     __tablename__ = 'rooms'
@@ -10,6 +10,7 @@ class RoomModel(db.Model):
     description = db.Column(db.String(80), nullable=False)
     room_category = db.Column(db.String(80), nullable=False)
     shift = db.Column(db.String(80), nullable=False)
+    is_occupied = db.Column(db.Boolean, default=False)
 
     def __init__(self, name, room_type, capacity, description, room_category, shift):
         self.name = name
@@ -34,7 +35,7 @@ class RoomModel(db.Model):
         }
 
     @classmethod
-    def find_by_room(cls, name):
+    def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
 
     @classmethod
@@ -48,7 +49,7 @@ class RoomModel(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-        
-    def delete_to_db(self):
-       db.session.delete(self)
-       db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()

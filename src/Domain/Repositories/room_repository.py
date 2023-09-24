@@ -1,5 +1,5 @@
 from datetime import datetime
-from Domain.Entities.room import Room
+from Domain.Entities.room import Room  # Verifique se o caminho está correto de acordo com a estrutura do diretório
 
 class RoomRepository:
     def __init__(self):
@@ -52,13 +52,16 @@ class RoomRepository:
         start_datetime = self.parse_datetime(start_time)
         end_datetime = self.parse_datetime(end_time)
 
+        # Verificando se o período de tempo é válido
         if start_datetime >= end_datetime:
             return {'error': 'Invalid time period'}
 
+        # Verificando se a sala já está reservada para o período fornecido
         for reservation in room.reservations:
-            if start_datetime < reservation['end_time'] and end_datetime > reservation['start_time']:
+            if not (start_datetime >= reservation['end_time'] or end_datetime <= reservation['start_time']):
                 return {'error': 'Room already occupied during this period'}
-        
+
+        # Reservando a sala
         room.reservations.append({
             'start_time': start_datetime,
             'end_time': end_datetime

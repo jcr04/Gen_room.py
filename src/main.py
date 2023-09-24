@@ -1,26 +1,21 @@
 from flask import Flask
 from flask_restful import Api
-from flask_cors import CORS
-from database import db, cors as cors_ext
-from controllers.room import room_controller
+from psycopg2 import apilevel
+from Presentation.Controllers.room_controller import room_controller
+from Infrastructure.database import db, cors as cors_ext
 
 app = Flask(__name__)
+api = Api(room_controller)
 
 # Configuração do SQLAlchemy para o PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost/Gen_room'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@127.0.0.1:5432/Gen_room'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-api = Api(app)
-CORS(app)
 
 # Initialize the extensions
 db.init_app(app)
 api.init_app(app)
 cors_ext.init_app(app)  # Use cors_ext to avoid name conflict with flask_cors.CORS
-
-# Map the URL '/static' to the '/static' folder on your filesystem
-app.static_url_path = '/static'
-app.static_folder = 'static'
 
 app.register_blueprint(room_controller, url_prefix='/api')
 

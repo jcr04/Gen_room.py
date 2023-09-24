@@ -56,13 +56,7 @@ class RoomService:
     def get_room_details(self, room_id):
         room = self.room_repository.find_by_id(room_id)
         if room:
-            return {
-                'id': room.id,
-                'name': room.name,
-                'is_occupied': room.is_occupied,
-                'capacity': room.capacity,  # Inclua a capacidade da sala aqui
-                'description': room.description  # Inclua a descrição da sala aqui
-            }
+            return room.to_detailed_json()  # Utilizando o método to_detailed_json
         return None
     
     def delete_room(self, room_id):
@@ -102,8 +96,8 @@ class RoomService:
             return {'error': 'Room not found'}
 
         try:
-            start_datetime = datetime.datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
-            end_datetime = datetime.datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
+            start_datetime = datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
+            end_datetime = datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
         except ValueError:
             return {'error': 'Invalid date format'}
 
@@ -116,11 +110,3 @@ class RoomService:
 
         room.reservations.append({'start_time': start_datetime, 'end_time': end_datetime})
         return {'message': 'Room reserved successfully'}
-
-    
-    def find_by_id(self, room_id):
-        for room in self.rooms:
-            print(f"Room ID: {room.id}")
-            if room.id == room_id:
-                return room
-        return None
