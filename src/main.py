@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
-
 from database import db, cors as cors_ext
 from controllers.room import room_controller
 

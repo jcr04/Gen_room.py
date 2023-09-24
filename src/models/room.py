@@ -52,11 +52,3 @@ class RoomModel(db.Model):
     def delete_to_db(self):
        db.session.delete(self)
        db.session.commit()
-        
-        
-        
-        
-        
-        
-        
-
