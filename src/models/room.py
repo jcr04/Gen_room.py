@@ -1,4 +1,3 @@
-
 from database import db
 
 class RoomModel(db.Model):
