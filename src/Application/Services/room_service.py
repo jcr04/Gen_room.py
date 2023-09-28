@@ -1,5 +1,5 @@
 import datetime
-from Domain.Entities.room import Room
+from Infrastructure.models.room import RoomModel
 from Domain.Repositories.room_repository import RoomRepository
 
 
@@ -8,105 +8,84 @@ class RoomService:
         self.room_repository = RoomRepository()
 
     def get_all_rooms(self):
-        return [room for room in self.room_repository.find_all() if hasattr(room, 'room_type')]
+        return self.room_repository.find_all()
 
     def validate_input(self, name, room_type, capacity, description, room_category, shift):
         if not all([name, room_type, capacity, description, room_category, shift]):
             return {'error': 'Todos os campos são obrigatórios.'}
-
-        if not isinstance(capacity, int) or capacity <= 0:
-            return {'error': 'A capacidade deve ser um número inteiro positivo.'}
-
-        valid_room_types = ['Sala-Aula', 'Sala-Interativa', "Laboratórios", "Auditórios", "Cozinhas"]
-        if room_type not in valid_room_types:
-            return {'error': 'O tipo da sala é inválido.'}
-
-        valid_shifts = ['Matutino', 'Vespertino', 'Noturno']
-        if shift not in valid_shifts:
-            return {'error': 'O turno é inválido.'}
-
+        
         return None
 
     def create_room(self, name, room_type, capacity, description, room_category, shift):
         validation_result = self.validate_input(name, room_type, capacity, description, room_category, shift)
         if validation_result:
             return validation_result
-
-        new_room = self.room_repository.create_room(name, room_type, capacity, description, room_category, shift)
-        return Room(new_room.id, new_room.name, new_room.room_type, new_room.capacity, new_room.description,
-                    new_room.room_category, new_room.shift)
+        
+        return self.room_repository.create_room(name, room_type, capacity, description, room_category, shift)
 
     def get_room_by_id(self, room_id):
-        room = self.room_repository.find_by_id(room_id)
-        return room if room else None
+        return self.room_repository.find_by_id(room_id)
 
     def get_occupied_rooms(self):
-        occupied_rooms = [room for room in self.room_repository.find_all() if room.is_occupied]
-        return [{'room': Room(room.id, room.name).to_json(), 'is_occupied': True} for room in occupied_rooms]
+        return [{'room': room.json(), 'is_occupied': room.is_occupied} for room in self.room_repository.find_all() if room.is_occupied]
     
     def reserve_room(self, room_id):
-        room = self.room_repository.find_by_id(room_id)
-        if room:
-            if room.is_occupied:
-                return None  # A sala já está ocupada
+        room = self.get_room_by_id(room_id)
+        if room and not room.is_occupied:
             room.is_occupied = True
-            return self.get_room_details(room_id)  # Retorna detalhes da sala após a reserva
+            return room.json()
         return None
     
     def get_room_details(self, room_id):
-        room = self.room_repository.find_by_id(room_id)
-        if room:
-            return room.to_detailed_json()  # Utilizando o método to_detailed_json
-        return None
+        room = self.get_room_by_id(room_id)
+        return room.json() if room else None
     
     def delete_room(self, room_id):
-        room = self.room_repository.find_by_id(room_id)
+        room = self.get_room_by_id(room_id)
         if room:
             self.room_repository.delete_room(room)
-            return True  # Sala excluída com sucesso
+            return True
         return False
     
     def get_available_rooms(self):
-        available_rooms = [room for room in self.room_repository.find_all() if not room.is_occupied]
-        return [Room(room.id, room.name) for room in available_rooms]
+        return [room.json() for room in self.room_repository.find_all() if not room.is_occupied]
     
     def update_room(self, room_id, data):
-        room = self.room_repository.find_by_id(room_id)
-    
+        room = self.get_room_by_id(room_id)
         if room:
-            if 'name' in data:
-                room.name = data['name']
-            if 'capacity' in data:
-                room.capacity = data['capacity']
-            if 'description' in data:
-                room.description = data['description']
-                
-            return room
+            updated_room = self.room_repository.update_room(room, data)
+        # Dependendo do seu design, você pode optar por fazer commit aqui ou no repository.
+        # db.session.commit()
+            return updated_room.json()
         return None
+
     
     def get_rooms_by_type(self, room_type):
-    # Consulte o repositório para buscar salas por tipo
-        rooms = self.room_repository.find_by_type(room_type)
+        return [room.json() for room in self.room_repository.find_by_type(room_type)]
 
-        return rooms
-    
     def reserve_room_by_period(self, room_id, start_time, end_time):
-        room = self.get_room_by_id(room_id)
+        room = self.room_repository.find_by_id(room_id)
+        
         if room is None:
             return {'error': 'Room not found'}
-
+            
         try:
             start_datetime = datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
             end_datetime = datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
-        except ValueError:
+        except ValueError:  
             return {'error': 'Invalid date format'}
-
+            
         if start_datetime >= end_datetime:
             return {'error': 'Invalid time period'}
-
-        if any(start_datetime < reservation['end_time'] and end_datetime > reservation['start_time']
-               for reservation in room.reservations):
+        
+        if any(start_datetime < reservation['end_time'] and end_datetime > reservation['start_time'] for reservation in room.reservations):
             return {'error': 'Room already occupied during this period'}
-
+        
         room.reservations.append({'start_time': start_datetime, 'end_time': end_datetime})
-        return {'message': 'Room reserved successfully'}
+        
+        # Adapte o próximo comando ao que está implementado no seu repositório ou ORM.
+        self.room_repository.save(room)
+        
+        # Adapte o próximo comando para o método correto se to_json() não estiver definido na sua classe Room.
+        return {'message': 'Room reserved successfully', 'room_details': room.to_json()}
+

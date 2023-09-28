@@ -1,70 +1,52 @@
 from datetime import datetime
-from Domain.Entities.room import Room  # Verifique se o caminho está correto de acordo com a estrutura do diretório
+from Infrastructure.models.room import RoomModel
+from Infrastructure.database import db  # Importe também o objeto db, caso precise.
 
 class RoomRepository:
     def __init__(self):
-        self.rooms = []
         self.init_sample_rooms()
 
     def init_sample_rooms(self):
-        self.create_room("Sala 101", "Sala-Aula", 10, "Sala de reunião para 10 pessoas", shift="Matutino")
-        self.create_room("Sala 102", "Sala-Aula", 8, "Sala de conferência para 8 pessoas", shift="Vespertino")
-        self.create_room("Sala 103", "Sala-Aula", 6, "Sala de reunião para 6 pessoas", shift="Noturno")
+        # Aqui você pode inserir os dados iniciais diretamente no banco de dados, se necessário.
+        pass
 
     def find_all(self):
-        return self.rooms
+        return RoomModel.query.all()
 
     def find_by_id(self, id):
-        return next((room for room in self.rooms if room.id == id), None)
+        return RoomModel.query.get(id)
 
     def create_room(self, name, room_type, capacity=None, description=None, room_category=None, shift=None):
-        new_room = Room(
-            id=str(len(self.rooms) + 1),
+        new_room = RoomModel(
             name=name,
             room_type=room_type,
-            capacity=capacity,
-            description=description,
-            room_category=room_category,
-            shift=shift
+            capacity=capacity if capacity else 0,
+            description=description if description else '',
+            room_category=room_category if room_category else '',
+            shift=shift if shift else '',
         )
-        self.rooms.append(new_room)
+        db.session.add(new_room)
+        db.session.commit()
         return new_room
     
     def delete_room(self, room):
-        self.rooms.remove(room)
+        db.session.delete(room)
+        db.session.commit()
 
     def update_room(self, room, data):
-        if 'name' in data:
-            room.name = data['name']
-        if 'capacity' in data:
-            room.capacity = data['capacity']
-        if 'description' in data:
-            room.description = data['description']
+        room.update_room(
+        name=data.get('name'),
+        capacity=data.get('capacity'),
+        description=data.get('description')
+    )
+    # Adicione qualquer outro campo que você queira atualizar
         return room
 
+
     def find_by_type(self, room_type):
-        return [room for room in self.rooms if room.room_type == room_type]
-    
-    def parse_datetime(self, time_str):
-        return datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
-    
+        return RoomModel.query.filter_by(room_type=room_type).all()
+
     def reserve_room(self, room, start_time, end_time):
-        start_datetime = self.parse_datetime(start_time)
-        end_datetime = self.parse_datetime(end_time)
+        # Você pode adaptar esse método conforme sua lógica de negócio, mas lembre-se de persistir as alterações com db.session.commit()
+        pass
 
-        # Verificando se o período de tempo é válido
-        if start_datetime >= end_datetime:
-            return {'error': 'Invalid time period'}
-
-        # Verificando se a sala já está reservada para o período fornecido
-        for reservation in room.reservations:
-            if not (start_datetime >= reservation['end_time'] or end_datetime <= reservation['start_time']):
-                return {'error': 'Room already occupied during this period'}
-
-        # Reservando a sala
-        room.reservations.append({
-            'start_time': start_datetime,
-            'end_time': end_datetime
-        })
-
-        return {'message': 'Room reserved successfully'}

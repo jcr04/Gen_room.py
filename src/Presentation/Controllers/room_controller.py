@@ -61,30 +61,33 @@ def edit_room_by_id(room_id):
 
 @room_controller.route('/rooms/<string:room_id>/reserve', methods=['POST'])
 def reserve_room(room_id):
-    """Reserve a room."""
-    result = room_service.reserve_room(room_id)
-    if result:
-        room_details = room_service.get_room_details(room_id)
-        return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200
-    return handle_error('Room not found or already occupied', 404)
+    room = RoomModel.find_by_id(room_id)
+    if not room or room.is_occupied:
+        return handle_error('Room not found or already occupied', 404)
+
+    room.is_occupied = True
+    room.save_to_db()
+
+    return jsonify({'message': 'Room reserved successfully', 'room_details': room.json()}), 200
+
 
 @room_controller.route('/rooms/<string:room_id>/reserve-by-period', methods=['POST'])
 def reserve_room_by_period(room_id):
-    """Reserve a room for a specific period."""
     data = request.get_json()
     start_time = data.get('start_time')
     end_time = data.get('end_time')
+    
+    room = RoomModel.find_by_id(room_id)
+    if not room:
+        return handle_error('Room not found', 404)
+        
+    if not room.is_available(start_time, end_time):
+        return handle_error('Room already occupied during this period', 400)
+    
+    room.reserve_room(start_time, end_time)
+    return jsonify({'message': 'Room reserved successfully', 'room_details': room.json()}), 200
 
-    if not start_time or not end_time:
-        return handle_error('Both start_time and end_time are required.', 400)
 
-    result = room_service.reserve_room_by_period(room_id, start_time, end_time)
-
-    if 'error' in result:
-        return jsonify(result), 400
-
-    room_details = room_service.get_room_details(room_id)
-    return jsonify({'message': 'Room reserved successfully', 'room_details': room_details}), 200
 
 # ---------------- Additional Room Retrieval Endpoints ------------------
 
@@ -96,22 +99,29 @@ def get_occupied_rooms():
 
 @room_controller.route('/rooms/available', methods=['GET'])
 def get_available_rooms():
-    """Retrieve all available rooms."""
-    available_rooms = room_service.get_available_rooms()
-    return jsonify([room.to_json() for room in available_rooms])
+    available_rooms = RoomModel.query.filter_by(is_occupied=False).all()
+    return jsonify([room.json() for room in available_rooms])
+
 
 @room_controller.route('/rooms/by-type/<string:room_type>', methods=['GET'])
 def get_rooms_by_type(room_type):
-    """Retrieve rooms based on their type."""
     valid_room_types = ["Sala-Aula", "Sala-Interativa", "Laboratórios", "Auditórios", "Cozinhas"]
     if room_type not in valid_room_types:
         return handle_error('Tipo de sala inválido.', 400)
 
-    rooms = room_service.get_rooms_by_type(room_type)
+    rooms = RoomModel.query.filter_by(room_type=room_type).all()
 
     if not rooms:
         return handle_error('Nenhuma sala encontrada para este tipo.', 404)
 
-    rooms_json = [room.to_detailed_json() for room in rooms]
+    return jsonify([room.json() for room in rooms]), 200
 
-    return jsonify({'rooms': rooms_json}), 200
+@room_controller.route('/rooms/<int:room_id>/update', methods=['PUT'])
+def update_room(room_id):
+    data = request.get_json()
+    updated_room_json = room_service.update_room(room_id, data)
+    if updated_room_json is None:
+        return handle_error('Room not found or invalid data', 404)
+    return updated_room_json, 200
+
+
