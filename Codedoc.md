@@ -130,6 +130,8 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 
 ## Endpoint da API
 ### Requisições pelo Postman
+* - ![Screenshot_17](https://github.com/jcr04/Gen_room.py/assets/70778525/30d835b9-06d7-4e98-8321-cbae41e4712b)
+
 A API oferece os seguintes endpoints:
 ### Room
 * /api/rooms (GET): Retorna todas as salas disponíveis.
@@ -166,7 +168,17 @@ A API oferece os seguintes endpoints:
 * - ![Screenshot_3](https://github.com/jcr04/Gen_room.py/assets/70778525/4588d1bc-565d-4ab5-8000-baadbfafca38)
 
 ## Events
-* /api/events
+* /api/events (POST) criar um Evento.
+* - ![Screenshot_10](https://github.com/jcr04/Gen_room.py/assets/70778525/d51273b0-8205-4e76-9fc8-9c13d56616ff)
+* /api/events (GET) Obter todos os eventos de todas as salas.
+* - ![Screenshot_11](https://github.com/jcr04/Gen_room.py/assets/70778525/219925a1-bb68-4310-a2e3-82af1e8d7686)
+* /api/rooms/<int:room_id>/events (PUT) Atualizar um Evento.
+* - ![Screenshot_12](https://github.com/jcr04/Gen_room.py/assets/70778525/5d35be89-e42a-4c1d-8aee-5ffcae9c177d)
+* /api/rooms/{room_id}/events (DELETE) Deletar Evento
+* - ![Screenshot_13](https://github.com/jcr04/Gen_room.py/assets/70778525/fa178755-b0d4-478f-b941-4edb6968d64b)
+* - ![Screenshot_14](https://github.com/jcr04/Gen_room.py/assets/70778525/aba26541-b959-4e8c-8ace-273fbaec930f)
+* - ![Screenshot_15](https://github.com/jcr04/Gen_room.py/assets/70778525/d13846bf-1e32-4dcc-b775-7d27c16ac441)
+* - ![Screenshot_16](https://github.com/jcr04/Gen_room.py/assets/70778525/497f969c-9e4c-4d97-b542-ef61c2f03fd2)
 
 Lembre-se de que para utilizar a API, você deve executar o script main.py e acessar os endpoints conforme necessário.
 
