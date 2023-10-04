@@ -9,11 +9,58 @@ class ReservationModel(db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
     start_time = db.Column(DateTime, nullable=False, default=datetime.utcnow)  # Corrigido aqui
     end_time = db.Column(DateTime, nullable=False, default=datetime.utcnow)
-
     
-    # Não se esqueça de adicionar back_populates em room quando você definir RoomModel
     room = db.relationship('RoomModel', back_populates='reservations')
 
+class EventModel(db.Model):
+    __tablename__ = 'events'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    organizer = db.Column(db.String(80), nullable=False)
+    start_time = db.Column(DateTime, nullable=False)
+    end_time = db.Column(DateTime, nullable=False)
+    participants = db.Column(db.String(500))  # Armazena os participantes como string; considere normalizar isso no futuro
+    description = db.Column(db.String(500), nullable=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
+
+    room = db.relationship('RoomModel', back_populates='events')
+
+
+    def json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'room_id': self.room_id,
+            'organizer': self.organizer,
+            'start_time': self.start_time.strftime('%d/%m/%Y %H:%M:%S'),
+            'end_time': self.end_time.strftime('%d/%m/%Y %H:%M:%S'),
+            'participants': self.participants.split(",") if self.participants else [],
+            'description': self.description
+        }
+        
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+    
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.get(id)
+
+    @classmethod
+    def find_by_room_id(cls, room_id):
+        return cls.query.filter_by(room_id=room_id).all()
+
+    
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
+        
 # Modelo de Sala
 class RoomModel(db.Model):
     __tablename__ = 'rooms'
@@ -29,6 +76,7 @@ class RoomModel(db.Model):
     
     # Relacionamento com ReservationModel
     reservations = db.relationship('ReservationModel', back_populates='room', cascade='all, delete-orphan')
+    events = db.relationship('EventModel', back_populates='room', cascade='all, delete-orphan')
     
     def __init__(self, name, room_type, capacity, description, room_category, shift):
         self.name = name

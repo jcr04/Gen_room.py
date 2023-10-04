@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, Flask
 from flask_restful import Api
 from Domain.Entities.room import Room
 from Application.Services.room_service import RoomService
-from Infrastructure.models.room import RoomModel
+from Infrastructure.models.room import EventModel, RoomModel
 from Infrastructure.database import db
 app = Flask(__name__)
 room_controller = Blueprint('room_controller', __name__)
@@ -124,4 +124,71 @@ def update_room(room_id):
         return handle_error('Room not found or invalid data', 404)
     return updated_room_json, 200
 
+
+# ---------------- events Endpoints ------------------
+
+@room_controller.route('/events', methods=['POST'])
+def create_event():
+    data = request.get_json()
+    room_id = data.get('room_id')
+
+    # Verificar se a sala existe
+    room = RoomModel.find_by_id(room_id)
+    if not room:
+        return handle_error('Room not found', 404)
+
+    # O método **data desempacotará o dicionário, e os nomes das chaves precisam corresponder aos parâmetros esperados pelo construtor do EventModel
+    event = EventModel(**data)
+    event.save_to_db()
+
+    return event.json(), 201
+
+@room_controller.route('/events', methods=['GET'])
+def get_all_events():
+    events = EventModel.find_all()
+    return jsonify([event.json() for event in events]), 200
+
+@room_controller.route('/rooms/<int:room_id>/events', methods=['GET'])
+def get_events_by_room(room_id):
+    room = RoomModel.find_by_id(room_id)
+    if not room:
+        return handle_error('Room not found', 404)
+    
+    events = EventModel.find_by_room_id(room_id)
+    return jsonify([event.json() for event in events]), 200
+
+@room_controller.route('/rooms/<int:room_id>/events', methods=['PUT'])
+def update_event(room_id):
+    data = request.get_json()
+    event_id = data.get('id')
+
+    if not event_id:
+        return handle_error('Event ID (id) is required in the request body', 400)
+
+    event = EventModel.find_by_id(event_id)
+    if not event or event.room_id != room_id:
+        return handle_error('Event not found for the given room', 404)
+    
+    # Aqui, você pode adicionar validação para os dados
+    for key, value in data.items():
+        if key != "id":  # Não queremos atualizar o ID do evento
+            setattr(event, key, value)
+
+    event.save_to_db()
+    return event.json(), 200
+
+@room_controller.route('/rooms/<int:room_id>/events', methods=['DELETE'])
+def delete_event(room_id):
+    data = request.get_json()
+    event_id = data.get('id')
+
+    if not event_id:
+        return handle_error('Event ID (id) is required in the request body', 400)
+
+    event = EventModel.find_by_id(event_id)
+    if not event or event.room_id != room_id:
+        return handle_error('Event not found for the given room', 404)
+    
+    event.delete_from_db()
+    return '', 204
 

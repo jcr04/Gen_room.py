@@ -1,7 +1,7 @@
 import datetime
 from Infrastructure.models.room import RoomModel
 from Domain.Repositories.room_repository import RoomRepository
-
+from Infrastructure.models.room import RoomModel, EventModel
 
 class RoomService:
     def __init__(self):
@@ -89,3 +89,51 @@ class RoomService:
         # Adapte o próximo comando para o método correto se to_json() não estiver definido na sua classe Room.
         return {'message': 'Room reserved successfully', 'room_details': room.to_json()}
 
+    def create_event(self, room_id, title, organizer, start_time, end_time, participants=None, description=None):
+        room = self.room_repository.find_by_id(room_id)
+        if not room:
+            return {'error': 'Room not found'}
+    
+        event = EventModel(title=title, organizer=organizer, start_time=start_time, end_time=end_time, participants=participants, description=description)
+        room.events.append(event)
+        room.save_to_db()
+
+        return event.json()
+
+    def get_all_events(self):
+        return [event.json() for event in EventModel.query.all()]
+
+    def get_event_by_id(self, event_id):
+        event = EventModel.query.get(event_id)
+        if not event:
+            return None
+        return event.json()
+
+    def update_event(self, event_id, data):
+        event = EventModel.query.get(event_id)
+        if not event:
+            return None
+
+        if 'title' in data:
+            event.title = data['title']
+        if 'organizer' in data:
+            event.organizer = data['organizer']
+        if 'start_time' in data:
+            event.start_time = data['start_time']
+        if 'end_time' in data:
+            event.end_time = data['end_time']
+        if 'participants' in data:
+            event.participants = ",".join(data['participants'])
+        if 'description' in data:
+            event.description = data['description']
+
+        event.save_to_db()
+
+        return event.json()
+
+    def delete_event(self, event_id):
+        event = EventModel.query.get(event_id)
+        if not event:
+            return False
+        event.delete_from_db()
+        return True

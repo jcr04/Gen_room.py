@@ -1,6 +1,8 @@
 from datetime import datetime
 from Infrastructure.models.room import RoomModel
 from Infrastructure.database import db  # Importe também o objeto db, caso precise.
+from Infrastructure.models.room import RoomModel, EventModel
+
 
 class RoomRepository:
     def __init__(self):
@@ -50,3 +52,50 @@ class RoomRepository:
         # Você pode adaptar esse método conforme sua lógica de negócio, mas lembre-se de persistir as alterações com db.session.commit()
         pass
 
+    def create_event(self, room_id, title, organizer, start_time, end_time, participants=None, description=None):
+        room = self.find_by_id(room_id)
+        if not room:
+            return None
+
+        event = EventModel(title=title, organizer=organizer, start_time=start_time, end_time=end_time, participants=participants, description=description)
+        room.events.append(event)
+        db.session.add(event)
+        db.session.commit()
+
+        return event
+
+    def get_all_events(self):
+        return EventModel.query.all()
+
+    def get_event_by_id(self, event_id):
+        return EventModel.query.get(event_id)
+
+    def update_event(self, event_id, data):
+        event = EventModel.query.get(event_id)
+        if not event:
+            return None
+
+        if 'title' in data:
+            event.title = data['title']
+        if 'organizer' in data:
+            event.organizer = data['organizer']
+        if 'start_time' in data:
+            event.start_time = data['start_time']
+        if 'end_time' in data:
+            event.end_time = data['end_time']
+        if 'participants' in data:
+            event.participants = ",".join(data['participants'])
+        if 'description' in data:
+            event.description = data['description']
+
+        db.session.commit()
+
+        return event
+
+    def delete_event(self, event_id):
+        event = EventModel.query.get(event_id)
+        if not event:
+            return False
+        db.session.delete(event)
+        db.session.commit()
+        return True
