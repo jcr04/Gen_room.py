@@ -26,49 +26,16 @@ O Genroom é modelado em torno do domínio de gerenciamento de salas, garantindo
 Cada componente do sistema tem uma única responsabilidade, garantindo que o código seja coeso e que as partes relacionadas estejam próximas.
 
 ## Funcionalidades Implementadas
-O Genroom implementa várias funcionalidades essenciais para o gerenciamento de salas:
-
-* Listagem de todas as salas disponíveis.
-* Detalhes de uma sala específica.
-* Criação de novas salas.
-* Reserva e liberação de salas.
-* Listagem de salas ocupadas.
+O Genroom é uma plataforma robusta para o gerenciamento eficiente de salas. 
+Aqui estão as funcionalidades chave que foram implementadas:
 
 
-### Como Executar a Aplicação
-Para executar a aplicação, siga as seguintes etapas:
+Funcionalidades Implementadas
+O Genroom é uma plataforma robusta para o gerenciamento eficiente de salas. Aqui estão as funcionalidades chave que foram implementadas:
 
-### Iniciar o Servidor Python HTTP:
-* Você inicia um servidor HTTP Python executando o comando python -m http.server 8000 a partir do diretório onde o seu arquivo index.html está localizado.
-
-### Acessar o Frontend:
-* - Abra um navegador da web e vá para http://localhost:8000/index.html.
-* - Isso carregará a página da web (frontend) no navegador.
-
-### Preencher o Formulário:
-* No frontend, você preenche o formulário com informações sobre uma nova sala que deseja criar.
-* - Os campos do formulário são: Nome da Sala, Tipo da Sala, Capacidade, Descrição e Categoria.
-
-### Enviar a Solicitação:
-* Quando você clica no botão "Criar Sala", o JavaScript captura os dados do formulário.
-
-### Enviar uma Solicitação para o Backend:
-* O JavaScript usa a função fetch para enviar uma solicitação POST para o backend Flask no endpoint create_room (por exemplo, http://localhost:5001/api/rooms).
-* A solicitação inclui os dados do formulário em formato JSON.
-
-### Backend Processa a Solicitação:
-* O backend, que já tem o CORS configurado para permitir solicitações do frontend, recebe a solicitação.
-* - Ele processa os dados recebidos, cria uma nova sala no banco de dados ou armazenamento e envia uma resposta de volta para o frontend.
-
-### Frontend Recebe a Resposta:
-* O frontend aguarda a resposta do backend.
-* - Se a criação da sala for bem-sucedida, o frontend exibe uma mensagem de sucesso e limpa o formulário.
-* Se ocorrer um erro, o frontend exibe uma mensagem de erro.
-### exemplo: 
-### criando uma sala via Front-end
-![Screenshot_4](https://github.com/jcr04/Gen_room.py/assets/70778525/b87fe405-c0a7-4dde-a331-a28b5c4c6d19)
-### serve backend retorna requisição ao armazenamento.
-![Screenshot_5](https://github.com/jcr04/Gen_room.py/assets/70778525/fe153ec6-3639-4058-9f11-b87e92ac45c6)
-![Screenshot_6](https://github.com/jcr04/Gen_room.py/assets/70778525/b02e3a75-0cac-4093-b118-e4a2e397d4d5)
-
-
+* Visão Geral das Salas: Capacidade de listar todas as salas disponíveis na plataforma.
+* Insights Detalhados: Fornece informações detalhadas de uma sala específica, incluindo características e sua disponibilidade.
+* Criação de Espaço: Permite aos usuários criar novas salas conforme as necessidades.
+* Gestão de Reservas: Funcionalidade para reservar salas para eventos específicos e também para liberá-las após o uso.
+* Monitoramento em Tempo Real: Listagem instantânea de todas as salas que estão atualmente ocupadas.
+* Eventos e Programações: Capacidade de criar, visualizar, editar e excluir eventos específicos associados a uma sala.
