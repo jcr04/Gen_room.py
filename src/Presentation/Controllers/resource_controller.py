@@ -1,15 +1,18 @@
 from flask import Blueprint, jsonify, request
-from Application.Services.resource_service import ResourceService
-from Domain.Entities.resource import Resource
+from Infrastructure.models.resource import ResourceModel, db
 
 resource_app = Blueprint('resource_app', __name__)
-resource_service = ResourceService()
+
+def handle_error(message, status_code):
+    return jsonify({'error': message}), status_code
+
+def create_response(data, message, status_code=200):
+    return jsonify({'data': data, 'message': message}), status_code
 
 @resource_app.route('/api/resources', methods=['GET'])
 def list_resources():
-    resources = resource_service.get_all_resources()
-    resource_list = [{**resource.to_json(), 'is_reserved': resource.is_reserved} for resource in resources]
-    return jsonify(resource_list), 200
+    resources = ResourceModel.query.all()
+    return create_response([resource.json() for resource in resources], 'Resources retrieved successfully')
 
 @resource_app.route('/api/resources', methods=['POST'])
 def create_resource():
@@ -17,34 +20,36 @@ def create_resource():
     name = data.get('name')
     description = data.get('description')
 
-    if not name or not description:
-        return jsonify({'error': 'Nome e descrição são obrigatórios'}), 400
+    if not name:
+        return handle_error('Nome é obrigatório', 400)
 
-    created_resource = resource_service.create_resource(name, description)
-    return jsonify(created_resource.to_json()), 201
+    created_resource = ResourceModel(name=name, description=description)
+    db.session.add(created_resource)
+    db.session.commit()
+    return create_response(created_resource.json(), 'Resource created successfully', 201)
 
 @resource_app.route('/api/resources/<string:resource_id>', methods=['DELETE'])
 def delete_resource(resource_id: str):
-    success = resource_service.delete_resource(resource_id)
-
-    if success:
-        return jsonify({'message': 'Recurso excluído com sucesso'}), 204
-    return jsonify({'error': 'Recurso não encontrado'}), 404
+    resource = ResourceModel.query.filter_by(id=resource_id).first()
+    if resource:
+        db.session.delete(resource)
+        db.session.commit()
+        return create_response({}, 'Recurso excluído com sucesso', 204)
+    return handle_error('Recurso não encontrado', 404)
 
 @resource_app.route('/api/resources/<string:resource_id>/reservations', methods=['GET'])
 def get_resource_reservations(resource_id: str):
-    reservations = resource_service.get_resource_reservations(resource_id)
-    return jsonify(reservations), 200
+    resource = ResourceModel.query.filter_by(id=resource_id).first()
+    if resource:
+        reservations = [reservation.json() for reservation in resource.reservations]
+        return create_response(reservations, 'Reservations retrieved successfully')
+    return handle_error('Recurso não encontrado', 404)
 
 @resource_app.route('/api/resources/<string:resource_id>/reserve', methods=['POST'])
 def reserve_resource(resource_id: str):
-    resource = resource_service.find_by_id(resource_id)
-    
-    if resource is None:
-        return jsonify({'error': 'Recurso não encontrado'}), 404
-
-    resource.is_reserved = True
-    return jsonify({
-        'message': 'Recurso reservado com sucesso',
-        'resource_details': resource.to_json()
-    }), 200
+    resource = ResourceModel.query.filter_by(id=resource_id).first()
+    if resource:
+        resource.is_reserved = True
+        db.session.commit()
+        return create_response(resource.json(), 'Recurso reservado com sucesso')
+    return handle_error('Recurso não encontrado', 404)

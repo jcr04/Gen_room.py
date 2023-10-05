@@ -2,13 +2,15 @@ from datetime import datetime
 from Infrastructure.database import db
 from sqlalchemy import DateTime
 
-# Modelo de Reserva
 class ReservationModel(db.Model):
     __tablename__ = 'reservations'
+
     id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    resource_id = db.Column(db.String, db.ForeignKey('resources.id'), nullable=False)
+    
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
-    start_time = db.Column(DateTime, nullable=False, default=datetime.utcnow)  # Corrigido aqui
-    end_time = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     
     room = db.relationship('RoomModel', back_populates='reservations')
 
