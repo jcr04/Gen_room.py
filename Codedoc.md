@@ -130,7 +130,7 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 
 ## Endpoint da API
 ### Requisições pelo Postman
-* - ![Screenshot_17](https://github.com/jcr04/Gen_room.py/assets/70778525/30d835b9-06d7-4e98-8321-cbae41e4712b)
+* - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/61aaa6d3-e48e-4891-a800-98a56f717ad3)
 
 A API oferece os seguintes endpoints:
 ### Room
@@ -179,6 +179,10 @@ A API oferece os seguintes endpoints:
 * - ![Screenshot_14](https://github.com/jcr04/Gen_room.py/assets/70778525/aba26541-b959-4e8c-8ace-273fbaec930f)
 * - ![Screenshot_15](https://github.com/jcr04/Gen_room.py/assets/70778525/d13846bf-1e32-4dcc-b775-7d27c16ac441)
 * - ![Screenshot_16](https://github.com/jcr04/Gen_room.py/assets/70778525/497f969c-9e4c-4d97-b542-ef61c2f03fd2)
+
+## Report
+* /api/rooms/report (GET): Analise de dados
+* - ![Screenshot_1](https://github.com/jcr04/Gen_room.py/assets/70778525/b3035ee2-60a0-46d0-8507-a282e4626de0)
 
 Lembre-se de que para utilizar a API, você deve executar o script main.py e acessar os endpoints conforme necessário.
 
