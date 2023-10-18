@@ -137,3 +137,37 @@ class RoomService:
             return False
         event.delete_from_db()
         return True
+
+    def generate_report(self, start_time, end_time, room_type=None):
+        try:
+            start_datetime = datetime.datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
+            end_datetime = datetime.datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
+        except ValueError:
+            return {'error': 'Invalid date format'}
+
+        if start_datetime >= end_datetime:
+            return {'error': 'Invalid time period'}
+
+        rooms = self.room_repository.find_all()
+
+        # Filtrar por tipo de sala se especificado
+        if room_type:
+            rooms = [room for room in rooms if room.room_type == room_type]
+
+        # Construindo o relatório
+        report = []
+        for room in rooms:
+            room_data = {
+                "room_name": room.name,
+                "room_type": room.room_type,
+                "events": []
+            }
+            
+            for event in room.events:
+                if event.start_time >= start_datetime and event.end_time <= end_datetime:
+                    room_data["events"].append(event.json())
+
+            if room_data["events"]:  # Se houver eventos na sala durante o período, adicionamos no relatório
+                report.append(room_data)
+
+        return report

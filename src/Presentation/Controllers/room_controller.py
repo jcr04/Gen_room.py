@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify, Flask
 from flask_restful import Api
 from Domain.Entities.room import Room
 from Application.Services.room_service import RoomService
-from Infrastructure.models.room import EventModel, RoomModel
+from Domain.Repositories.room_repository import RoomRepository
+from Infrastructure.models.room import EventModel, ReservationModel, RoomModel
 from Infrastructure.database import db
 app = Flask(__name__)
 room_controller = Blueprint('room_controller', __name__)
@@ -191,4 +192,32 @@ def delete_event(room_id):
     
     event.delete_from_db()
     return '', 204
+
+@room_controller.route('/rooms/report', methods=['GET'])
+def report():
+    # Total rooms
+    total_rooms = RoomModel.query.count()
+
+    # Rooms with maximum capacity
+    max_capacity = db.session.query(db.func.max(RoomModel.capacity)).scalar()
+    rooms_with_max_capacity = RoomModel.query.filter_by(capacity=max_capacity).count()
+
+    # Rooms available in matutino and noturno shifts
+    matutino_available = RoomModel.query.filter_by(shift='matutino').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
+    noturno_available = RoomModel.query.filter_by(shift='noturno').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
+
+    # Rooms reserved
+    rooms_reserved = RoomModel.query.join(ReservationModel).count()
+
+    # Rooms in events
+    rooms_in_events = RoomModel.query.join(EventModel).count()
+
+    return jsonify({
+        'total_rooms': total_rooms,
+        'rooms_with_max_capacity': rooms_with_max_capacity,
+        'matutino_available': matutino_available,
+        'noturno_available': noturno_available,
+        'rooms_reserved': rooms_reserved,
+        'rooms_in_events': rooms_in_events
+    })
 

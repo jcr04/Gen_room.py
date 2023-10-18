@@ -36,6 +36,18 @@ class Room:
             'events': [event.to_json() for event in self.events]  # Converta eventos em sua representação JSON detalhada
         }
 
+    def generate_report(self):
+        """ Generate a report based on the room type """
+        return {
+            'id': self.id,
+            'name': self.name,
+            'room_type': self.room_type,
+            'capacity': self.capacity,
+            'description': self.description,
+            'room_category': self.room_category,
+            'shift': self.shift,
+            'number_of_events': len(self.events)
+        }
 
 class Event:
     def __init__(self, id, title, organizer, start_time, end_time, participants=None, description=None):

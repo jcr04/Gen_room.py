@@ -99,3 +99,31 @@ class RoomRepository:
         db.session.delete(event)
         db.session.commit()
         return True
+
+
+    def generate_report(self):
+        # Total rooms
+        total_rooms = RoomModel.query.count()
+
+        # Rooms with maximum capacity
+        max_capacity = db.session.query(db.func.max(RoomModel.capacity)).scalar()
+        rooms_with_max_capacity_count = RoomModel.query.filter_by(capacity=max_capacity).count()
+
+        # Rooms available in matutino and noturno shifts
+        matutino_available = RoomModel.query.filter_by(shift='matutino', is_occupied=False).count()
+        noturno_available = RoomModel.query.filter_by(shift='noturno', is_occupied=False).count()
+
+        # Rooms reserved
+        rooms_reserved = RoomModel.query.filter_by(is_occupied=True).count()
+
+        # Rooms in events
+        rooms_in_events = RoomModel.query.filter(RoomModel.events.any()).count()
+
+        return {
+            'total_rooms': total_rooms,
+            'rooms_with_max_capacity': rooms_with_max_capacity_count,
+            'matutino_available': matutino_available,
+            'noturno_available': noturno_available,
+            'rooms_reserved': rooms_reserved,
+            'rooms_in_events': rooms_in_events
+        }

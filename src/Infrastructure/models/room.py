@@ -11,7 +11,6 @@ class ReservationModel(db.Model):
     resource_id = db.Column(db.String, db.ForeignKey('resources.id'), nullable=False)
     
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), nullable=False)
-    
     room = db.relationship('RoomModel', back_populates='reservations')
 
 class EventModel(db.Model):
@@ -136,7 +135,7 @@ class RoomModel(db.Model):
         reservation = ReservationModel(start_time=start_time, end_time=end_time)
         self.reservations.append(reservation)
         db.session.commit()
-        
+
     def is_available(self, start_time, end_time):
         start_datetime = datetime.strptime(start_time, '%d/%m/%Y %H:%M:%S')
         end_datetime = datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
