@@ -1,10 +1,12 @@
-from flask import Blueprint, request, jsonify, Flask
+from io import StringIO
+from flask import Blueprint, make_response, request, jsonify, Flask
 from flask_restful import Api
 from Domain.Entities.room import Room
 from Application.Services.room_service import RoomService
 from Domain.Repositories.room_repository import RoomRepository
 from Infrastructure.models.room import EventModel, ReservationModel, RoomModel
 from Infrastructure.database import db
+import csv
 app = Flask(__name__)
 room_controller = Blueprint('room_controller', __name__)
 api = Api(room_controller)
@@ -211,13 +213,24 @@ def report():
 
     # Rooms in events
     rooms_in_events = RoomModel.query.join(EventModel).count()
+    
+    # Definindo os dados
+    data = [
+        ['Total Rooms', total_rooms],
+        ['Rooms with Max Capacity', rooms_with_max_capacity],
+        ['Matutino Available', matutino_available],
+        ['Noturno Available', noturno_available],
+        ['Rooms Reserved', rooms_reserved],
+        ['Rooms in Events', rooms_in_events]
+    ]
 
-    return jsonify({
-        'total_rooms': total_rooms,
-        'rooms_with_max_capacity': rooms_with_max_capacity,
-        'matutino_available': matutino_available,
-        'noturno_available': noturno_available,
-        'rooms_reserved': rooms_reserved,
-        'rooms_in_events': rooms_in_events
-    })
+    # Criar uma string de CSV a partir dos dados
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerow(['Metric', 'Value'])  # cabeçalho
+    cw.writerows(data)
 
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=rooms_report.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
