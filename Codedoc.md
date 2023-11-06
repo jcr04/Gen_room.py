@@ -159,14 +159,7 @@ A API oferece os seguintes endpoints:
 * - ![Screenshot_19](https://github.com/jcr04/Gen_room.py/assets/70778525/2116084d-1899-471b-8e4d-26d69a5380ed)
 * /api/rooms/<string:room_id>/reserve-by-period (POST): Reserva uma sala com base em seu ID durante um período especificado.
 * - ![Screenshot_18](https://github.com/jcr04/Gen_room.py/assets/70778525/eebe1038-8388-45b5-babc-df36208562a5)
-## Resources
-* /api/resources (GET): Retorna todos os recursos disponiveis.
-* - ![Screenshot_1](https://github.com/jcr04/Gen_room.py/assets/70778525/43526a29-b8d6-439c-8a29-14634c9bf52e)
-* /api/resources (POST): criar novo recurso.
-* - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/b8fccff8-b974-4ac7-bc8f-234416c2ddae)
-* /api/resources/<string:room_id>/reserve: (GET) reservas um recurso por um periodo determinado.
-* - ![Screenshot_3](https://github.com/jcr04/Gen_room.py/assets/70778525/4588d1bc-565d-4ab5-8000-baadbfafca38)
-
+  
 ## Events
 * /api/events (POST) criar um Evento.
 * - ![Screenshot_10](https://github.com/jcr04/Gen_room.py/assets/70778525/d51273b0-8205-4e76-9fc8-9c13d56616ff)
