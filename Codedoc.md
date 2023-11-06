@@ -100,24 +100,6 @@ Este método cria uma nova sala com um nome e um tipo especificado.
 * - room_type (str): O tipo da sala.
 * Retorno: Um objeto Room representando a sala recém-criada.
 
-## In-Memory Room Repository (in_memory_room_repository.py)
-O módulo in_memory_room_repository.py implementa um repositório de salas em memória.
-
-### Classe InMemoryRoomRepository
-A classe InMemoryRoomRepository herda do RoomRepository e fornece uma implementação em memória para armazenar as salas.
-
-Método find_all()
-Este método retorna todas as salas disponíveis armazenadas em memória.
-
-* Retorno: Uma lista de objetos Room representando as salas.
-
-Método find_by_id(id)
-Este método encontra uma sala com base em seu ID.
-
-* Parâmetros:
-* - id (str): O ID da sala a ser encontrada.
-* Retorno: Um objeto Room representando a sala encontrada ou None se não for encontrada.
-
 ## Main (main.py)
 O módulo main.py é o ponto de entrada da aplicação e configura o servidor Flask para disponibilizar os endpoints da API de salas.
 
@@ -130,7 +112,7 @@ Este bloco de código inicia o servidor Flask quando o script é executado diret
 
 ## Endpoint da API
 ### Requisições pelo Postman
-* - ![Screenshot_2](https://github.com/jcr04/Gen_room.py/assets/70778525/61aaa6d3-e48e-4891-a800-98a56f717ad3)
+* - ![Screenshot_10](https://github.com/jcr04/Gen_room.py/assets/70778525/d708c954-e4e7-415a-ae12-addb724f36c2)
 
 A API oferece os seguintes endpoints:
 ### Room
