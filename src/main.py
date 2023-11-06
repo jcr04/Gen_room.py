@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api
 from Presentation.Controllers.room_controller import room_controller
-from Presentation.Controllers.resource_controller import resource_app  # Importando o blueprint de recurso
 from Infrastructure.database import db, cors as cors_ext
 
 app = Flask(__name__)
@@ -17,7 +16,6 @@ cors_ext.init_app(app)  # Use cors_ext to avoid name conflict with flask_cors.CO
 
 # Register the blueprints
 app.register_blueprint(room_controller, url_prefix='/api')
-app.register_blueprint(resource_app, url_prefix='/api')  # Registrando o blueprint de recurso
 
 # Create the tables in the database
 with app.app_context():
