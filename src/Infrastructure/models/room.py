@@ -141,5 +141,29 @@ class RoomModel(db.Model):
         end_datetime = datetime.strptime(end_time, '%d/%m/%Y %H:%M:%S')
         for reservation in self.reservations:
             if not (start_datetime >= reservation.end_time or end_datetime <= reservation.start_time):
-                return False  # Room is not available during this period
+                return False
         return True
+    
+
+    def generate_report(self):
+        # Estrutura básica do relatório para a sala
+        report = {
+            'room_info': self.json(),  # As informações básicas da sala
+            'reservations': [],
+            'events': []
+        }
+        
+        # Adicionando as reservas associadas à sala ao relatório
+        for reservation in self.reservations:
+            report['reservations'].append({
+                'reservation_id': reservation.id,
+                'start_time': reservation.start_time.strftime('%d/%m/%Y %H:%M:%S'),
+                'end_time': reservation.end_time.strftime('%d/%m/%Y %H:%M:%S'),
+                'resource_id': reservation.resource_id
+            })
+        
+        # Adicionando os eventos associados à sala ao relatório
+        for event in self.events:
+            report['events'].append(event.json())
+
+        return report

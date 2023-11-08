@@ -195,27 +195,28 @@ def delete_event(room_id):
     event.delete_from_db()
     return '', 204
 
+
+from flask import make_response
+from io import StringIO
+import csv
+
 @room_controller.route('/rooms/report', methods=['GET'])
 def report():
-    # Total rooms
+    # Dados agregados
     total_rooms = RoomModel.query.count()
-
-    # Rooms with maximum capacity
     max_capacity = db.session.query(db.func.max(RoomModel.capacity)).scalar()
     rooms_with_max_capacity = RoomModel.query.filter_by(capacity=max_capacity).count()
-
-    # Rooms available in matutino and noturno shifts
     matutino_available = RoomModel.query.filter_by(shift='matutino').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
     noturno_available = RoomModel.query.filter_by(shift='noturno').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
-
-    # Rooms reserved
     rooms_reserved = RoomModel.query.join(ReservationModel).count()
-
-    # Rooms in events
     rooms_in_events = RoomModel.query.join(EventModel).count()
-    
-    # Definindo os dados
-    data = [
+
+    # Prepara um objeto StringIO para armazenar dados CSV
+    si = StringIO()
+    cw = csv.writer(si)
+
+    # Escreve os dados agregados no começo ou fim do arquivo CSV
+    aggregated_data = [
         ['Total Rooms', total_rooms],
         ['Rooms with Max Capacity', rooms_with_max_capacity],
         ['Matutino Available', matutino_available],
@@ -224,13 +225,31 @@ def report():
         ['Rooms in Events', rooms_in_events]
     ]
 
-    # Criar uma string de CSV a partir dos dados
-    si = StringIO()
-    cw = csv.writer(si)
-    cw.writerow(['Metric', 'Value'])  # cabeçalho
-    cw.writerows(data)
+    # Escreve o cabeçalho dos dados agregados
+    cw.writerow(['Métrica', 'Valor'])
+    cw.writerows(aggregated_data)
 
+# Espaçamento entre seções
+    cw.writerow([])
+
+# Escreve o cabeçalho dos dados detalhados de cada sala com cabeçalhos mais legíveis
+    cw.writerow(['ID da Sala', 'Nome', 'Tipo de Sala', 'Capacidade', 'Descrição', 'Categoria da Sala', 'Turno', 'Número de Eventos'])
+
+# Obtém todas as salas do banco de dados, possivelmente ordenadas por algum critério
+    rooms = RoomModel.query.order_by(RoomModel.name).all()  # Exemplo de ordenação pelo nome
+    for room in rooms:
+        room_data = room.generate_report()
+
+    room_info = room_data['room_info']
+    cw.writerow([
+        room_info['id'], room_info['name'], room_info['room_type'], room_info['capacity'],
+        room_info['description'], room_info['room_category'], room_info['shift'],
+        len(room_data['events'])  # Aqui contamos o número de eventos associados
+    ])
+
+    # Prepara a resposta com o arquivo CSV
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename=rooms_report.csv"
     output.headers["Content-type"] = "text/csv"
     return output
+
