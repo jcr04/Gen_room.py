@@ -7,6 +7,10 @@ from Domain.Repositories.room_repository import RoomRepository
 from Infrastructure.models.room import EventModel, ReservationModel, RoomModel
 from Infrastructure.database import db
 import csv
+from flask import make_response
+from io import StringIO
+import csv
+
 app = Flask(__name__)
 room_controller = Blueprint('room_controller', __name__)
 api = Api(room_controller)
@@ -196,58 +200,60 @@ def delete_event(room_id):
     return '', 204
 
 
-from flask import make_response
-from io import StringIO
-import csv
-
 @room_controller.route('/rooms/report', methods=['GET'])
 def report():
-    # Dados agregados
+    # Obtenção de dados agregados
     total_rooms = RoomModel.query.count()
     max_capacity = db.session.query(db.func.max(RoomModel.capacity)).scalar()
     rooms_with_max_capacity = RoomModel.query.filter_by(capacity=max_capacity).count()
-    matutino_available = RoomModel.query.filter_by(shift='matutino').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
-    noturno_available = RoomModel.query.filter_by(shift='noturno').outerjoin(ReservationModel).filter(ReservationModel.id == None).count()
-    rooms_reserved = RoomModel.query.join(ReservationModel).count()
-    rooms_in_events = RoomModel.query.join(EventModel).count()
+    matutino_available = RoomModel.query.filter(RoomModel.shift == 'matutino', RoomModel.is_occupied == False).count()
+    noturno_available = RoomModel.query.filter(RoomModel.shift == 'noturno', RoomModel.is_occupied == False).count()
+    rooms_reserved = RoomModel.query.filter(RoomModel.is_occupied == True).count()
+    rooms_in_events = db.session.query(RoomModel).join(EventModel).distinct().count()
 
-    # Prepara um objeto StringIO para armazenar dados CSV
+    # Preparação do CSV
     si = StringIO()
     cw = csv.writer(si)
 
-    # Escreve os dados agregados no começo ou fim do arquivo CSV
-    aggregated_data = [
-        ['Total Rooms', total_rooms],
-        ['Rooms with Max Capacity', rooms_with_max_capacity],
-        ['Matutino Available', matutino_available],
-        ['Noturno Available', noturno_available],
-        ['Rooms Reserved', rooms_reserved],
-        ['Rooms in Events', rooms_in_events]
-    ]
-
-    # Escreve o cabeçalho dos dados agregados
+    # Cabeçalhos e dados agregados
     cw.writerow(['Métrica', 'Valor'])
-    cw.writerows(aggregated_data)
+    cw.writerow(['Total Rooms', total_rooms])
+    cw.writerow(['Rooms with Max Capacity', rooms_with_max_capacity])
+    cw.writerow(['Matutino Available', matutino_available])
+    cw.writerow(['Noturno Available', noturno_available])
+    cw.writerow(['Rooms Reserved', rooms_reserved])
+    cw.writerow(['Rooms in Events', rooms_in_events])
+    cw.writerow(['Total de Reservas', 'calcular este valor'])  # Você precisa calcular isso baseado na lógica do seu negócio
+    cw.writerow(['Tempo Médio de Ocupação', 'calcular este valor'])  # Você precisa calcular isso baseado na lógica do seu negócio
+    cw.writerow([])  # Espaço entre as seções
 
-# Espaçamento entre seções
-    cw.writerow([])
+    # Cabeçalhos dos detalhes de cada sala
+    cw.writerow(['ID da Sala', 'Nome', 'Tipo de Sala', 'Capacidade', 'Descrição', 'Categoria da Sala', 'Turno', 'Número de Eventos', 'Número de Reservas', 'Tempo Médio de Reserva'])
 
-# Escreve o cabeçalho dos dados detalhados de cada sala com cabeçalhos mais legíveis
-    cw.writerow(['ID da Sala', 'Nome', 'Tipo de Sala', 'Capacidade', 'Descrição', 'Categoria da Sala', 'Turno', 'Número de Eventos'])
-
-# Obtém todas as salas do banco de dados, possivelmente ordenadas por algum critério
-    rooms = RoomModel.query.order_by(RoomModel.name).all()  # Exemplo de ordenação pelo nome
+    # Detalhes de cada sala
+    rooms = RoomModel.query.all()
     for room in rooms:
-        room_data = room.generate_report()
+        number_of_reservations = len(room.reservations)  # Número de reservas da sala
+        average_reservation_time = 'calcular este valor'  # Você precisa calcular isso baseado na lógica do seu negócio
+        cw.writerow([
+            room.id, room.name, room.room_type, room.capacity, room.description,
+            room.room_category, room.shift, len(room.events), number_of_reservations,
+            average_reservation_time
+        ])
+    
+    cw.writerow([])  # Espaço entre as seções
 
-    room_info = room_data['room_info']
-    cw.writerow([
-        room_info['id'], room_info['name'], room_info['room_type'], room_info['capacity'],
-        room_info['description'], room_info['room_category'], room_info['shift'],
-        len(room_data['events'])  # Aqui contamos o número de eventos associados
-    ])
+    # Cabeçalhos dos detalhes das salas como na segunda parte do seu pedido
+    cw.writerow(['Nome', 'Tipo de Sala', 'Capacidade', 'Descrição', 'Categoria', 'Turno', 'Ocupada', 'Número de Eventos'])
 
-    # Prepara a resposta com o arquivo CSV
+    # Detalhes das salas como na segunda parte do seu pedido
+    for room in rooms:
+        cw.writerow([
+            room.name, room.room_type, room.capacity, room.description,
+            room.room_category, room.shift, 'true' if room.is_occupied else 'false', len(room.events)
+        ])
+
+    # Retorno do CSV
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename=rooms_report.csv"
     output.headers["Content-type"] = "text/csv"
